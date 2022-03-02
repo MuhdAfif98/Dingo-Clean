@@ -1,0 +1,6 @@
+{
+  "appTitle": "dingo_clean",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}

@@ -1,7 +1,8 @@
 import 'package:dingo_clean/src/constant.dart';
 import 'package:dingo_clean/src/default_button.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password1/forgot_password1_screen.dart';
-import 'package:dingo_clean/src/screen/user/homepage/homepage_screen.dart';
+import 'package:dingo_clean/src/screen/authentication/sign_up/sign_up_screen.dart';
+import 'package:dingo_clean/src/screen/user/homepage/components/homepage_screen.dart';
 import 'package:dingo_clean/src/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -64,8 +65,10 @@ class _BodyState extends State<Body> {
                 ),
                 const SizedBox(height: 30),
                 TextFormField(
-                  style: textStyleNormal(primaryColor),
+                
+                  style: textStyleNormal(secondaryColor),
                   decoration: InputDecoration(
+                    prefixIcon: const Icon(Iconsax.message),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30.0),
                         borderSide: const BorderSide(color: Colors.transparent),
@@ -92,6 +95,7 @@ class _BodyState extends State<Body> {
                   obscureText: true,
                   obscuringCharacter: "*",
                   decoration: InputDecoration(
+                    prefixIcon: const Icon(Iconsax.unlock),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: const BorderSide(color: Colors.transparent),
@@ -157,12 +161,17 @@ class _BodyState extends State<Body> {
                           style: textStyleNormal(Colors.black),
                         ),
                         const SizedBox(width: 5),
-                        RichText(
-                          text: const TextSpan(
-                            text: "Sign Up",
-                            style: TextStyle(
-                              color: primaryColor,
-                              fontWeight: FontWeight.bold,
+                        ScaleTap(
+                          onPressed: () {
+                            Navigator.restorablePushNamed(context, SignUpPageScreen.routeName);
+                          },
+                          child: RichText(
+                            text: const TextSpan(
+                              text: "Sign Up",
+                              style: TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -170,13 +179,13 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                 ),
-                // ScaleTap(
-                //   onPressed: () {},
-                //   child: Text(
-                //     "Go to Admin Page",
-                //     style: textStyleBold(primaryColor, 14),
-                //   ),
-                // )
+                ScaleTap(
+                  onPressed: () {},
+                  child: Text(
+                    "Go to Admin Page",
+                    style: textStyleBold(primaryColor, 14),
+                  ),
+                )
               ],
             ),
           ),

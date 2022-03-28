@@ -2,8 +2,19 @@ import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_pas
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password2/forgot_password2_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password3/forgot_password3_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/sign_in/sign_in_screen.dart';
+import 'package:dingo_clean/src/screen/authentication/sign_up/sign_up_screen.dart';
+import 'package:dingo_clean/src/screen/authentication/sign_up2/sign_up2_screen.dart';
+import 'package:dingo_clean/src/screen/authentication/verification_code/verification_code_screen.dart';
 import 'package:dingo_clean/src/screen/splash/splash_screen.dart';
-import 'package:dingo_clean/src/screen/user/homepage/homepage_screen.dart';
+import 'package:dingo_clean/src/screen/user/booking_1/booking_1_screen.dart';
+import 'package:dingo_clean/src/screen/user/booking_2/booking_2_screen.dart';
+import 'package:dingo_clean/src/screen/user/booking_history/booking_history_screen.dart';
+import 'package:dingo_clean/src/screen/user/change_language/change_language_screen.dart';
+import 'package:dingo_clean/src/screen/user/change_password/change_password_screen.dart';
+import 'package:dingo_clean/src/screen/user/homepage/components/homepage_screen.dart';
+import 'package:dingo_clean/src/screen/user/my_profile/my_profile_screen.dart';
+import 'package:dingo_clean/src/screen/user/setting/setting_screen.dart';
+import 'package:dingo_clean/src/screen/user/update_profile/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -81,6 +92,28 @@ class MyApp extends StatelessWidget {
                     return const ForgotPassword2Screen();
                   case ForgotPassword3Screen.routeName:
                     return const ForgotPassword3Screen();
+                  case SignUpPageScreen.routeName:
+                    return const SignUpPageScreen();
+                  case VerificationCodeScreen.routeName:
+                    return const VerificationCodeScreen();
+                  case UpdateProfileScreen.routeName:
+                    return const UpdateProfileScreen();
+                  case SignUp2Screen.routeName:
+                    return const SignUp2Screen();
+                  case SettingScreen.routeName:
+                    return const SettingScreen();
+                  case ChangePasswordScreen.routeName:
+                    return const ChangePasswordScreen();
+                  case ChangeLanguageScreen.routeName:
+                    return const ChangeLanguageScreen();
+                  case MyProfileScreen.routeName:
+                    return const MyProfileScreen();
+                  case BookingHistoryScreen.routeName:
+                    return const BookingHistoryScreen();
+                  case Booking1Screen.routeName:
+                    return const Booking1Screen();
+                    case Booking2Screen.routeName:
+                    return const Booking2Screen();
                   //This is user homepage
                   case HomepageScreen.routeName:
                     return const HomepageScreen();

@@ -13,9 +13,21 @@ const lightPrimaryColor = Color.fromRGBO(250, 251, 254, 1);
 const disabledBg = Color.fromRGBO(247, 247, 247, 1.0);
 const disabledText = Color.fromRGBO(181, 181, 181, 1.0);
 
-//Gradient constant
+//Gradient constant vertical
 const primaryGradient =
     LinearGradient(begin: Alignment.topCenter, end: Alignment.center, colors: [
+  Color.fromRGBO(0, 186, 255, 1),
+  Color.fromRGBO(250, 251, 254, 1),
+]);
+
+const revertPrimaryGradient =
+    LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [
+  Color.fromRGBO(0, 186, 255, 1),
+  Color.fromRGBO(250, 251, 254, 1),
+]);
+
+const secondaryGradient =
+    LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft, colors: [
   Color.fromRGBO(0, 186, 255, 1),
   Color.fromRGBO(250, 251, 254, 1),
 ]);

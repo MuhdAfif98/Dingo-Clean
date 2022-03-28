@@ -1,8 +1,8 @@
 import 'package:dingo_clean/src/constant.dart';
 import 'package:dingo_clean/src/theme.dart';
-import 'package:fdottedline_nullsafety/fdottedline__nullsafety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 
 class Body extends StatefulWidget {
@@ -22,45 +22,53 @@ class _BodyState extends State<Body> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            imagePlaceHolder(),
-            const SizedBox(height: 30),
             TextFormField(
-              style: textStyleNormal(primaryColor),
-              decoration: defaultInputDecoration("Name"),
+              style: textStyleNormal(secondaryColor),
+              decoration:
+                  defaultInputDecoration("Email", const Icon(Iconsax.message)),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              style: textStyleNormal(primaryColor),
-              decoration: defaultInputDecoration("Contact Number"),
+              keyboardType: TextInputType.phone,
+              style: textStyleNormal(secondaryColor),
+              decoration: defaultInputDecoration(
+                  "Contact Number", const Icon(Iconsax.call)),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              style: textStyleNormal(primaryColor),
-              decoration: defaultInputDecoration("Address"),
+              style: textStyleNormal(secondaryColor),
+              decoration:
+                  defaultInputDecoration("Address", const Icon(Iconsax.location)),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              style: textStyleNormal(primaryColor),
-              decoration: defaultInputDecoration("City"),
+              style: textStyleNormal(secondaryColor),
+              decoration:
+                  defaultInputDecoration("City", const Icon(Iconsax.map)),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              style: textStyleNormal(primaryColor),
-              decoration: defaultInputDecoration("State"),
+              style: textStyleNormal(secondaryColor),
+              decoration:
+                  defaultInputDecoration("State", const Icon(Iconsax.gps)),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              style: textStyleNormal(primaryColor),
-              decoration: defaultInputDecoration("Postcode"),
+              keyboardType: TextInputType.number,
+              style: textStyleNormal(secondaryColor),
+              decoration: defaultInputDecoration(
+                  "Postcode", const Icon(Iconsax.map_1)),
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 
-  InputDecoration defaultInputDecoration(String? hintText) {
+  InputDecoration defaultInputDecoration(String? hintText, Widget? prefix) {
     return InputDecoration(
+        prefixIcon: prefix,
         counterText: "",
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -81,44 +89,5 @@ class _BodyState extends State<Body> {
         filled: true,
         hintStyle: textStyleMedium(),
         hintText: hintText);
-  }
-
-  Widget imagePlaceHolder() {
-    return SizedBox(
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FDottedLine(
-            width: double.infinity,
-            color: textGray,
-            corner: FDottedLineCorner.all(15),
-            space: 13,
-            strokeWidth: 2,
-            dottedLength: 10,
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 80,
-                    vertical: 40,
-                  ),
-                  child: Icon(
-                    Iconsax.user,
-                    color: textGray,
-                    size: 54,
-                  ),
-                ),
-                Text(
-                  "Upload Your Selfie",
-                  style: textStyleMedium(),
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

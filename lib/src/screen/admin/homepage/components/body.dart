@@ -1,17 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dingo_clean/src/constant.dart';
 import 'package:dingo_clean/src/screen/authentication/sign_in/sign_in_screen.dart';
 import 'package:dingo_clean/src/screen/user/booking_1/booking_1_screen.dart';
 import 'package:dingo_clean/src/screen/user/setting/setting_screen.dart';
 import 'package:dingo_clean/src/theme.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scale_tap/flutter_scale_tap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:lottie/lottie.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -64,7 +58,7 @@ class _BodyState extends State<Body> {
                           style: textStyleNormal(Colors.white),
                         ),
                         Text(
-                          "USER",
+                          "ADMIN",
                           style: textStyleBold(Colors.white, 14),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

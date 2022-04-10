@@ -1,5 +1,6 @@
 import 'package:dingo_clean/src/constant.dart';
 import 'package:dingo_clean/src/default_button.dart';
+import 'package:dingo_clean/src/screen/admin/homepage/components/homepage_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password1/forgot_password1_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/sign_up/sign_up_screen.dart';
 import 'package:dingo_clean/src/screen/user/homepage/components/homepage_screen.dart';
@@ -180,7 +181,7 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 ScaleTap(
-                  onPressed: () {},
+                  onPressed: () {Navigator.restorablePushNamed(context, HomepageAdminScreen.routeName);},
                   child: Text(
                     "Go to Admin Page",
                     style: textStyleBold(primaryColor, 14),

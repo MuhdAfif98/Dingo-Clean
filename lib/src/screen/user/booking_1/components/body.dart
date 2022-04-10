@@ -1,8 +1,6 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
-import 'package:date_picker_timeline/extra/color.dart';
-import 'package:dingo_clean/src/constant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_scale_tap/flutter_scale_tap.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class Body extends StatefulWidget {
@@ -27,19 +25,7 @@ class _BodyState extends State<Body> {
     '13:00',
     '14:00',
   ];
-  @override
-  void initState() {
-    Future.delayed(const Duration(milliseconds: 400), () {
-      _scrollController.scrollTo(
-        index: 24,
-        duration: const Duration(seconds: 3),
-        curve: Curves.easeInOut,
-      );
-    });
-
-    super.initState();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,19 +39,23 @@ class _BodyState extends State<Body> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               )),
           Container(
-              margin: const EdgeInsets.symmetric(vertical: 20.0),
-              height: 100.0,
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                children: [
-                  houseType(),
-                  houseType(),
-                  houseType(),
-                  houseType(),
-                ],
-              ),
+            margin: const EdgeInsets.symmetric(vertical: 20.0),
+            height: 120.0,
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              children: [
+                houseType("assets/images/house_type/bungalow.png", "Bungalow"),
+                houseType("assets/images/house_type/semi-d.png", "Semi-D"),
+                houseType(
+                    "assets/images/house_type/terraced-house.png", "Terrace"),
+                houseType(
+                    "assets/images/house_type/apartment.png", "Apartment"),
+                houseType(
+                    "assets/images/house_type/condominium.png", "Condo"),
+              ],
             ),
+          ),
           const SizedBox(
             height: 10,
           ),
@@ -86,6 +76,7 @@ class _BodyState extends State<Body> {
             controller: _controller,
             initialSelectedDate: DateTime.now(),
             selectionColor: Colors.lightBlue,
+            deactivatedColor: Colors.grey.shade300,
             selectedTextColor: Colors.black,
             onDateChange: (date) {
               // New date selected
@@ -117,11 +108,11 @@ class _BodyState extends State<Body> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         color: _selectedHour == _hours[index]
-                            ? Colors.orange.shade100.withOpacity(0.5)
-                            : Colors.orange.withOpacity(0),
+                            ? Colors.lightBlue
+                            : Colors.white,
                         border: Border.all(
                           color: _selectedHour == _hours[index]
-                              ? Colors.orange
+                              ? Colors.blue.shade900
                               : Colors.white.withOpacity(0),
                           width: 1.5,
                         ),
@@ -145,54 +136,78 @@ class _BodyState extends State<Body> {
           const SizedBox(
             height: 10,
           ),
-          Container(
-              alignment: Alignment.centerLeft,
-              child: const Text(
-                "Additional Service",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )),
-              Container(
-              margin: const EdgeInsets.symmetric(vertical: 20.0),
-              height: 100.0,
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                children: [
-                  addServices(),
-                  addServices(),
-                  addServices(),
-                  addServices(),
-                ],
-              ),
-            ),
+          // Container(
+          //     alignment: Alignment.centerLeft,
+          //     child: const Text(
+          //       "Additional Service",
+          //       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          //     )),
+          // Container(
+          //   margin: const EdgeInsets.symmetric(vertical: 20.0),
+          //   height: 100.0,
+          //   child: ListView(
+          //     physics: const BouncingScrollPhysics(),
+          //     scrollDirection: Axis.horizontal,
+          //     children: [
+          //       addServices(),
+          //       addServices(),
+          //       addServices(),
+          //       addServices(),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
   }
 
-  Card houseType() {
-    return Card(
-      color: Colors.red,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: const SizedBox(
-          width: 100,
-          child: Center(
-            child: Text("House Type"),
-          )),
+  ScaleTap houseType(String image, houseType) {
+    return ScaleTap(
+      onPressed: (){},
+      child: Card(
+        color: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [shadowList()],
+            ),
+            width: 100,
+            child: Column(
+              children: [
+                Image.asset(image),
+                const SizedBox(
+                  height: 5,
+                ),
+                Center(child: Text(houseType)),
+              ],
+            )),
+      ),
     );
   }
 
-  Card addServices() {
-    return Card(
-      color: Colors.red,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: const SizedBox(
-          width: 100,
-          child: Center(
-            child: Text("Additional Services"),
-          )),
+  // Card addServices() {
+  //   return Card(
+  //     color: Colors.red,
+  //     elevation: 2,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+  //     child: const SizedBox(
+  //         width: 100,
+  //         child: Center(
+  //           child: Text("Additional Services"),
+  //         )),
+  //   );
+  // }
+
+  BoxShadow shadowList() {
+    return BoxShadow(
+      blurRadius: 7,
+      spreadRadius: 0,
+      offset: const Offset(4, 4),
+      color: Colors.black.withOpacity(0.2),
     );
   }
 }

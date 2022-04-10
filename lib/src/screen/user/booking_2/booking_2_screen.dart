@@ -1,5 +1,6 @@
 import 'package:dingo_clean/src/default_button.dart';
-import 'package:dingo_clean/src/screen/user/booking_1/components/body.dart';
+import 'package:dingo_clean/src/screen/user/booking_2/components/body.dart';
+import 'package:dingo_clean/src/screen/user/payment/payment_screen.dart';
 import 'package:dingo_clean/src/theme_app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,9 @@ class _Booking2ScreenScreenState extends State<Booking2Screen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: DefaultButton(
             title: "Checkout",
-            press: () {},
+            press: () {
+              Navigator.restorablePushNamed(context, PaymentScreen.routeName);
+            },
           )),
     );
   }

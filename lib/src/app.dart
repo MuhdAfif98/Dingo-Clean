@@ -1,3 +1,5 @@
+import 'package:dingo_clean/src/screen/admin/financial/financial_screen.dart';
+import 'package:dingo_clean/src/screen/admin/homepage/components/homepage_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password1/forgot_password1_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password2/forgot_password2_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password3/forgot_password3_screen.dart';
@@ -13,6 +15,8 @@ import 'package:dingo_clean/src/screen/user/change_language/change_language_scre
 import 'package:dingo_clean/src/screen/user/change_password/change_password_screen.dart';
 import 'package:dingo_clean/src/screen/user/homepage/components/homepage_screen.dart';
 import 'package:dingo_clean/src/screen/user/my_profile/my_profile_screen.dart';
+import 'package:dingo_clean/src/screen/user/payment/payment_screen.dart';
+import 'package:dingo_clean/src/screen/user/receipt/receipt_screen.dart';
 import 'package:dingo_clean/src/screen/user/setting/setting_screen.dart';
 import 'package:dingo_clean/src/screen/user/update_profile/update_profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -112,11 +116,18 @@ class MyApp extends StatelessWidget {
                     return const BookingHistoryScreen();
                   case Booking1Screen.routeName:
                     return const Booking1Screen();
-                    case Booking2Screen.routeName:
+                  case Booking2Screen.routeName:
                     return const Booking2Screen();
-                  //This is user homepage
+                  case PaymentScreen.routeName:
+                    return const PaymentScreen();
+                  case ReceiptScreen.routeName:
+                    return const ReceiptScreen();
                   case HomepageScreen.routeName:
                     return const HomepageScreen();
+                  case HomepageAdminScreen.routeName:
+                    return const HomepageAdminScreen();
+                  case FinancialScreen.routeName:
+                    return const FinancialScreen();
                   case SplashScreen.routeName:
                   default:
                     return const SplashScreen();

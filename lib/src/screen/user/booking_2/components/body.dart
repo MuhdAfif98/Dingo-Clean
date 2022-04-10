@@ -1,8 +1,11 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:date_picker_timeline/extra/color.dart';
 import 'package:dingo_clean/src/constant.dart';
+import 'package:dingo_clean/src/theme.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_scale_tap/flutter_scale_tap.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class Body extends StatefulWidget {
@@ -13,186 +16,215 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final DatePickerController _controller = DatePickerController();
-  DateTime _selectedValue = DateTime.now();
-  String _selectedHour = '08:00';
-  final ItemScrollController _scrollController = ItemScrollController();
-
-  final List<String> _hours = <String>[
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
+  String? selectedValue;
+  List<String> items = [
+    'Yes',
+    'No',
   ];
-  @override
-  void initState() {
-    Future.delayed(const Duration(milliseconds: 400), () {
-      _scrollController.scrollTo(
-        index: 24,
-        duration: const Duration(seconds: 3),
-        curve: Curves.easeInOut,
-      );
-    });
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Container(
-              alignment: Alignment.centerLeft,
-              child: const Text(
-                "Select House Type",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )),
-          Container(
-              margin: const EdgeInsets.symmetric(vertical: 20.0),
-              height: 100.0,
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //Personal Details
+            Container(
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [shadowList()],
+              ),
+              child: Column(
                 children: [
-                  houseType(),
-                  houseType(),
-                  houseType(),
-                  houseType(),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 5, bottom: 10),
+                      child: const Text("Personal Details",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16))),
+                  TextFormField(
+                    style: textStyleNormal(primaryColor),
+                    decoration: defaultInputDecoration("Name"),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    style: textStyleNormal(primaryColor),
+                    decoration: defaultInputDecoration("Contact Number"),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    style: textStyleNormal(primaryColor),
+                    decoration: defaultInputDecoration("Address"),
+                  ),
                 ],
               ),
             ),
-          const SizedBox(
-            height: 10,
-          ),
-          Container(
-              alignment: Alignment.centerLeft,
-              child: const Text(
-                "Select Date and Time",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )),
-          const SizedBox(
-            height: 10,
-          ),
-          DatePicker(
-            DateTime.now(),
-            width: 60,
-            daysCount: 30,
-            height: 80,
-            controller: _controller,
-            initialSelectedDate: DateTime.now(),
-            selectionColor: Colors.lightBlue,
-            selectedTextColor: Colors.black,
-            onDateChange: (date) {
-              // New date selected
-              setState(() {
-                _selectedValue = date;
-              });
-            },
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: 50,
-            child: ScrollablePositionedList.builder(
-                physics: const BouncingScrollPhysics(),
-                itemScrollController: _scrollController,
-                scrollDirection: Axis.horizontal,
-                itemCount: _hours.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedHour = _hours[index];
-                      });
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      width: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: _selectedHour == _hours[index]
-                            ? Colors.orange.shade100.withOpacity(0.5)
-                            : Colors.orange.withOpacity(0),
-                        border: Border.all(
-                          color: _selectedHour == _hours[index]
-                              ? Colors.orange
-                              : Colors.white.withOpacity(0),
-                          width: 1.5,
+            const SizedBox(height: 15),
+            //Precaution Measure
+            Container(
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [shadowList()],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 5, bottom: 10),
+                      child: const Text("Precaution Measure",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16))),
+                  precautionQuestion("Will you be at home?"),
+                  precautionQuestion("Is parking available?"),
+                  precautionQuestion("Any pets?"),
+                  precautionQuestion("Any chemical allergic?"),
+                  precautionQuestion("After service sanitize?"),
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
+            //Cleaning Area
+            // Container(
+            //   padding: const EdgeInsets.all(8.0),
+            //   decoration: BoxDecoration(
+            //     color: Colors.white,
+            //     borderRadius: BorderRadius.circular(10),
+            //     boxShadow: [shadowList()],
+            //   ),
+            //   child: Column(
+            //     children: [
+            //       Container(
+            //           alignment: Alignment.centerLeft,
+            //           padding: const EdgeInsets.only(left: 5, bottom: 10),
+            //           child: const Text("Cleaning Area",
+            //               style: TextStyle(
+            //                   fontWeight: FontWeight.bold, fontSize: 16))),
+  
+            //     ],
+            //   ),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding precautionQuestion(String question) {
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: Row(
+        children: [
+          Expanded(flex: 4, child: Text(question)),
+          Expanded(
+            flex: 2,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton2(
+                isExpanded: true,
+                hint: Row(
+                  children: const [
+                    Expanded(
+                      child: Text(
+                        'Select',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
                         ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            _hours[index],
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w500),
-                          ),
-                        ],
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                  );
-                }),
-          ),
-          Text(_selectedHour.toString()),
-          Text(_selectedValue.toString()),
-          const SizedBox(
-            height: 10,
-          ),
-          Container(
-              alignment: Alignment.centerLeft,
-              child: const Text(
-                "Additional Service",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )),
-              Container(
-              margin: const EdgeInsets.symmetric(vertical: 20.0),
-              height: 100.0,
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                children: [
-                  addServices(),
-                  addServices(),
-                  addServices(),
-                  addServices(),
-                ],
+                  ],
+                ),
+                items: items
+                    .map((item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ))
+                    .toList(),
+                value: selectedValue,
+                onChanged: (value) {
+                  setState(() {
+                    selectedValue = value as String;
+                  });
+                },
+                icon: const Icon(
+                  Icons.arrow_forward_ios_outlined,
+                ),
+                iconSize: 14,
+                iconEnabledColor: Colors.black,
+                iconDisabledColor: Colors.grey,
+                buttonHeight: 30,
+                buttonWidth: 30,
+                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                buttonDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: Colors.black26,
+                  ),
+                  color: Colors.white,
+                ),
+                buttonElevation: 2,
+                itemHeight: 25,
+                dropdownDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
+                ),
+                dropdownElevation: 8,
+                scrollbarRadius: const Radius.circular(40),
+                scrollbarThickness: 6,
+                scrollbarAlwaysShow: true,
               ),
             ),
+          ),
         ],
       ),
     );
   }
 
-  Card houseType() {
-    return Card(
-      color: Colors.red,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: const SizedBox(
-          width: 100,
-          child: Center(
-            child: Text("House Type"),
-          )),
-    );
+  InputDecoration defaultInputDecoration(String? hintText) {
+    return InputDecoration(
+        counterText: "",
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(color: Colors.transparent),
+          gapPadding: 10,
+        ),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: primaryColor),
+            gapPadding: 10),
+        contentPadding: const EdgeInsets.fromLTRB(15, 15, 0, 15),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(color: Colors.transparent),
+          gapPadding: 10,
+        ),
+        fillColor: disabledBg,
+        filled: true,
+        hintStyle: textStyleMedium(),
+        hintText: hintText);
   }
 
-  Card addServices() {
-    return Card(
-      color: Colors.red,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: const SizedBox(
-          width: 100,
-          child: Center(
-            child: Text("Additional Services"),
-          )),
+  BoxShadow shadowList() {
+    return BoxShadow(
+      blurRadius: 6,
+      spreadRadius: 5,
+      offset: const Offset(4, 4),
+      color: Colors.black.withOpacity(0.2),
     );
   }
 }

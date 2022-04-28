@@ -1,7 +1,9 @@
 import 'package:dingo_clean/src/constant.dart';
 import 'package:dingo_clean/src/default_button.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password2/forgot_password2_screen.dart';
+import 'package:dingo_clean/src/screen/authentication/sign_in/sign_in_screen.dart';
 import 'package:dingo_clean/src/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -57,11 +59,10 @@ class _BodyState extends State<Body> {
                   ),
                   const SizedBox(height: 30),
                   DefaultButton(
-                    title: "Send Code",
+                    title: "Reset Password",
                     press: () {
                       // Call API
-                      Navigator.restorablePushNamed(
-                          context, ForgotPassword2Screen.routeName);
+                      verifyEmail();
                     },
                   )
                 ],
@@ -98,5 +99,29 @@ class _BodyState extends State<Body> {
         labelText: labelText,
         labelStyle: textStyleMedium(),
         prefixIcon: icon);
+  }
+
+  Future verifyEmail() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: emailEditingController.text.trim());
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Email have been sent")));
+      Navigator.restorablePushNamed(context, SignInScreen.routeName);
+    } on FirebaseAuthException catch (e) {
+      print(e);
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Error occurs")));
+      Navigator.of(context).pop();
+    }
   }
 }

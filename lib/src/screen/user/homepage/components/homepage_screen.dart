@@ -1,23 +1,25 @@
 import 'package:dingo_clean/src/constant.dart';
+import 'package:dingo_clean/src/model/user.dart';
 import 'package:dingo_clean/src/screen/user/booking_history/booking_history_screen.dart';
 import 'package:dingo_clean/src/screen/user/homepage/components/body.dart';
 import 'package:dingo_clean/src/screen/user/homepage/components/body0.dart';
 import 'package:dingo_clean/src/screen/user/my_profile/my_profile_screen.dart';
 import 'package:dingo_clean/src/screen/user/update_profile/update_profile_screen.dart';
 import 'package:dingo_clean/src/size_config.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class HomepageScreen extends StatefulWidget {
-  const HomepageScreen({ Key? key }) : super(key: key);
-static const routeName = '/homepageUser';
+  const HomepageScreen({Key? key}) : super(key: key);
+  static const routeName = '/homepageUser';
   @override
   State<HomepageScreen> createState() => _HomepageScreenState();
 }
 
 class _HomepageScreenState extends State<HomepageScreen> {
-   final PageStorageBucket bucket = PageStorageBucket();
+  final PageStorageBucket bucket = PageStorageBucket();
   int currentIndex = 0;
 
   var currentPageValue = 0.0;
@@ -32,6 +34,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
       currentIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

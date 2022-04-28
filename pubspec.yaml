@@ -11,10 +11,12 @@ environment:
 
 dependencies:
   cached_network_image: ^3.2.0
+  cloud_firestore: ^3.1.11
   country_icons: ^2.0.2
   date_picker_timeline: ^1.2.3
   dropdown_button2: ^1.2.2
   fdottedline_nullsafety: ^2.0.0
+  firebase_auth: ^3.3.13
   fl_chart: ^0.50.1
   flutter:
     sdk: flutter
@@ -32,6 +34,12 @@ dependencies:
   scrollable_positioned_list: ^0.2.3
   simple_animations: ^4.0.1
   url_launcher: ^6.0.20
+  js: ^0.6.2
+  firebase_core: ^1.14.0
+  image_picker: ^0.8.5
+  firebase_storage: ^10.2.12
+  easy_localization: ^3.0.0
+  
 
 dev_dependencies:
   flutter_test:

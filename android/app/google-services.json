@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "104457181561",
+    "project_id": "dingo-clean",
+    "storage_bucket": "dingo-clean.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104457181561:android:69799e1034594f7455f7a8",
+        "android_client_info": {
+          "package_name": "com.example.dingo_clean"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "104457181561-koj7u3km5i9cjsnat0tav1eo2kcllpau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWliTY7JxVE-n5W1OX-JBIRv9fVicKLmw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104457181561-koj7u3km5i9cjsnat0tav1eo2kcllpau.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

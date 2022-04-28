@@ -1,4 +1,5 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:dingo_clean/src/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scale_tap/flutter_scale_tap.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -15,6 +16,8 @@ class _BodyState extends State<Body> {
   DateTime _selectedValue = DateTime.now();
   String _selectedHour = '08:00';
   final ItemScrollController _scrollController = ItemScrollController();
+  String? _selectedService;
+  String? _selectedHouse;
 
   final List<String> _hours = <String>[
     '08:00',
@@ -25,13 +28,64 @@ class _BodyState extends State<Body> {
     '13:00',
     '14:00',
   ];
-  
+
+  final _services = [
+    "Basic House Cleaning",
+    "Deep Cleaning",
+    "Laundry Cleaning",
+    "Green Cleaning",
+    "Sanitization",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
+          Container(
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                "Select Cleaning Service",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              )),
+          const SizedBox(
+            height: 10,
+          ),
+          FormField<String>(
+            builder: (FormFieldState<String> state) {
+              return InputDecorator(
+                decoration: InputDecoration(
+                    labelStyle: textStyleNormal(Colors.black),
+                    errorStyle: const TextStyle(
+                        color: Colors.redAccent, fontSize: 16.0),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0))),
+                isEmpty: _selectedService == '',
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: _selectedService,
+                    isDense: true,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedService = newValue;
+                        state.didChange(newValue);
+                      });
+                    },
+                    items: _services.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           Container(
               alignment: Alignment.centerLeft,
               child: const Text(
@@ -51,8 +105,7 @@ class _BodyState extends State<Body> {
                     "assets/images/house_type/terraced-house.png", "Terrace"),
                 houseType(
                     "assets/images/house_type/apartment.png", "Apartment"),
-                houseType(
-                    "assets/images/house_type/condominium.png", "Condo"),
+                houseType("assets/images/house_type/condominium.png", "Condo"),
               ],
             ),
           ),
@@ -136,26 +189,6 @@ class _BodyState extends State<Body> {
           const SizedBox(
             height: 10,
           ),
-          // Container(
-          //     alignment: Alignment.centerLeft,
-          //     child: const Text(
-          //       "Additional Service",
-          //       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          //     )),
-          // Container(
-          //   margin: const EdgeInsets.symmetric(vertical: 20.0),
-          //   height: 100.0,
-          //   child: ListView(
-          //     physics: const BouncingScrollPhysics(),
-          //     scrollDirection: Axis.horizontal,
-          //     children: [
-          //       addServices(),
-          //       addServices(),
-          //       addServices(),
-          //       addServices(),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );
@@ -163,7 +196,12 @@ class _BodyState extends State<Body> {
 
   ScaleTap houseType(String image, houseType) {
     return ScaleTap(
-      onPressed: (){},
+      onPressed: () {
+        setState(() {
+          _selectedHouse = houseType;
+          print(_selectedHouse);
+        });
+      },
       child: Card(
         color: Colors.white,
         elevation: 2,
@@ -171,7 +209,7 @@ class _BodyState extends State<Body> {
         child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: houseType == _selectedHouse ? Colors.blueAccent : Colors.white,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [shadowList()],
             ),
@@ -188,19 +226,6 @@ class _BodyState extends State<Body> {
       ),
     );
   }
-
-  // Card addServices() {
-  //   return Card(
-  //     color: Colors.red,
-  //     elevation: 2,
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-  //     child: const SizedBox(
-  //         width: 100,
-  //         child: Center(
-  //           child: Text("Additional Services"),
-  //         )),
-  //   );
-  // }
 
   BoxShadow shadowList() {
     return BoxShadow(

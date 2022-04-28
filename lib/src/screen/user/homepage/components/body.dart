@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dingo_clean/src/constant.dart';
 import 'package:dingo_clean/src/screen/authentication/sign_in/sign_in_screen.dart';
 import 'package:dingo_clean/src/screen/user/booking_1/booking_1_screen.dart';
 import 'package:dingo_clean/src/screen/user/setting/setting_screen.dart';
 import 'package:dingo_clean/src/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,30 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  
+  late String _uid;
+
+  String name = '';
+  String image = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getData().whenComplete(() {
+      setState(() {});
+    });
+  }
+
+  Future<void> getData() async {
+    User? user = _auth.currentUser;
+    _uid = user!.uid;
+    final DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('user').doc(_uid).get();
+    name = userDoc.get('name');
+    image = userDoc.get('image');
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -45,12 +71,12 @@ class _BodyState extends State<Body> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50)),
                       clipBehavior: Clip.antiAlias,
-                      child: Image.network(
-                        "https://imgix.ranker.com/user_node_img/50126/1002515936/original/1002515936-photo-u2?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=375",
-                        width: 40.0,
-                        height: 40.0,
-                        fit: BoxFit.fill,
-                      ),
+                      child: Image.network(image,
+                          width: 40.0, height: 40.0, fit: BoxFit.cover,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                        return const Text('');
+                      }),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -64,7 +90,7 @@ class _BodyState extends State<Body> {
                           style: textStyleNormal(Colors.white),
                         ),
                         Text(
-                          "USER",
+                          name,
                           style: textStyleBold(Colors.white, 14),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -74,8 +100,7 @@ class _BodyState extends State<Body> {
                   ),
                   ScaleTap(
                     onPressed: () {
-                      Navigator.restorablePushNamed(
-                          context, SignInScreen.routeName);
+                      signOut();
                     },
                     child: const Icon(
                       Iconsax.logout,
@@ -119,27 +144,221 @@ class _BodyState extends State<Body> {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  servicesList(
-                      "assets/images/basic_house_cleaning.png",
-                      "assets/images/deep_cleaning.png",
-                      "Basic House Cleaning",
-                      "Deep Cleaning"),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ScaleTap(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/basic_house_cleaning.png",
+                                    scale: 1.5,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text("Basic House Cleaning"),
+                                ],
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [shadowList()],
+                            ),
+                          ),
+                          onPressed: () {
+                         
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: ScaleTap(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/deep_cleaning.png",
+                                    scale: 1.5,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text("Deep Cleaning"),
+                                ],
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [shadowList()],
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
-                  servicesList(
-                      "assets/images/laundry_cleaning.png",
-                      "assets/images/sanitization.png",
-                      "Laundry Cleaning",
-                      "Sanitization"),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ScaleTap(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/laundry_cleaning.png",
+                                    scale: 1.5,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text("Laundry Cleaning"),
+                                ],
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [shadowList()],
+                            ),
+                          ),
+                          onPressed: () {
+                 
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: ScaleTap(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/green_cleaning.png",
+                                    scale: 1.5,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text("Green Cleaning"),
+                                ],
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [shadowList()],
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
-                  servicesList(
-                      "assets/images/green_cleaning.png",
-                      "assets/images/under_maintenance.png",
-                      "Green Cleaning",
-                      "Under Maintenance ")
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ScaleTap(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/sanitization.png",
+                                    scale: 1.5,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text("Sanitization"),
+                                ],
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [shadowList()],
+                            ),
+                          ),
+                          onPressed: () {
+                            
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: ScaleTap(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/under_maintenance.png",
+                                    scale: 1.5,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text("Under Maintenance"),
+                                ],
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [shadowList()],
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  FloatingActionButton.extended(
+                    onPressed: () {
+                      Navigator.restorablePushNamed(context, Booking1Screen.routeName);
+                    },
+                    label: Row(
+                      children: const [Icon(Iconsax.book), Text("Book Now")],
+                    ),
+                  )
                 ],
               ),
             ))
@@ -203,74 +422,6 @@ class _BodyState extends State<Body> {
     }
   }
 
-  Row servicesList(String image1, image2, title1, title2) {
-    return Row(
-      children: [
-        Expanded(
-          child: ScaleTap(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Column(
-                  children: [
-                    Image.asset(
-                      image1,
-                      scale: 1.5,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(title1),
-                  ],
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [shadowList()],
-              ),
-            ),
-            onPressed: () {
-              Navigator.restorablePushNamed(context, Booking1Screen.routeName);
-            },
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          child: ScaleTap(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                  children: [
-                    Image.asset(
-                      image2,
-                      scale: 1.5,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(title2),
-                  ],
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [shadowList()],
-              ),
-            ),
-            onPressed: () {},
-          ),
-        ),
-      ],
-    );
-  }
-
   BoxShadow shadowList() {
     return BoxShadow(
       blurRadius: 7,
@@ -278,5 +429,10 @@ class _BodyState extends State<Body> {
       offset: const Offset(4, 4),
       color: Colors.black.withOpacity(0.2),
     );
+  }
+
+  Future signOut() async {
+    await _auth.signOut();
+    Navigator.of(context).pop();
   }
 }

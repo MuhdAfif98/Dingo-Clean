@@ -16,21 +16,13 @@ class UpdateProfileScreen extends StatefulWidget {
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
-      appBar: const ThemeAppBar(
+      appBar: ThemeAppBar(
         "Update Profile",
         color: Colors.transparent,
       ),
-      body: const Body(),
-      bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: DefaultButton(
-            title: "Update",
-            press: () {
-              Navigator.restorablePushNamed(context, HomepageScreen.routeName);
-            },
-          )),
+      body: Body(),
     );
   }
 }

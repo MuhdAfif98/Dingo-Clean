@@ -15,24 +15,17 @@ class SignUpPageScreen extends StatefulWidget {
 }
 
 class _SignUpPageScreenState extends State<SignUpPageScreen> {
+
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
-      appBar: const ThemeAppBar(
+      appBar: ThemeAppBar(
         "Sign Up",
         color: Colors.transparent,
       ),
-      body: const Body(),
-      bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: DefaultButton(
-            title: "Next",
-            press: () {
-              Navigator.restorablePushNamed(
-                  context, SignUp2Screen.routeName);
-            },
-          )),
+      body: Body(),
     );
   }
 }

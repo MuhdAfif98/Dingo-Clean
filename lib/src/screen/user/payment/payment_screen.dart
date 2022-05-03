@@ -15,22 +15,15 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
-      appBar: const ThemeAppBar(
+      appBar: ThemeAppBar(
         "Payment Option",
         color: Colors.transparent,
         primaryBg: false,
       ),
-      body: const Body(),
-      bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: DefaultButton(
-            title: "Pay Now",
-            press: () {
-              Navigator.restorablePushNamed(context, ReceiptScreen.routeName);
-            },
-          )),
+      body: Body(),
+   
     );
   }
 }

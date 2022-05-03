@@ -90,26 +90,6 @@ class _BodyState extends State<Body> {
               ),
             ),
             const SizedBox(height: 15),
-            //Cleaning Area
-            // Container(
-            //   padding: const EdgeInsets.all(8.0),
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     borderRadius: BorderRadius.circular(10),
-            //     boxShadow: [shadowList()],
-            //   ),
-            //   child: Column(
-            //     children: [
-            //       Container(
-            //           alignment: Alignment.centerLeft,
-            //           padding: const EdgeInsets.only(left: 5, bottom: 10),
-            //           child: const Text("Cleaning Area",
-            //               style: TextStyle(
-            //                   fontWeight: FontWeight.bold, fontSize: 16))),
-  
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),

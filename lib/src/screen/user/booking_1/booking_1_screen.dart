@@ -15,19 +15,19 @@ class Booking1Screen extends StatefulWidget {
 class _Booking1ScreenScreenState extends State<Booking1Screen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
-      appBar: const ThemeAppBar(
+      appBar: ThemeAppBar(
         "Booking 1",
         color: Colors.transparent,
       ),
-      body: const Body(),
-      bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: DefaultButton(
-            title: "Next",
-            press: () {Navigator.restorablePushNamed(context, Booking2Screen.routeName);},
-          )),
+      body: Body(),
+      // bottomNavigationBar: Container(
+      //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      //     child: DefaultButton(
+      //       title: "Next",
+      //       press: () {Navigator.restorablePushNamed(context, Booking2Screen.routeName);},
+      //     )),
     );
   }
 }

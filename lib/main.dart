@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
@@ -14,6 +15,7 @@ void main() async {
   // This prevents a sudden theme change when the app is first displayed.
   await settingsController.loadSettings();
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = "pk_test_51Ku7LCEj4onVUXNa9fdU57cK3tyZwShxcuWDBnSrB6AkzZJCU0mS6rBXmdgB3qhvCsSs6vf0kkoZlMqTUpgjXcO800iy86USRR";
   await Firebase.initializeApp();
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the

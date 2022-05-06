@@ -504,6 +504,6 @@ class _BodyState extends State<Body> {
   }
 
   void calculateTotalPrice() {
-    totalPrice=housePrice+servicePrice;
+    totalPrice = housePrice + servicePrice;
   }
 }

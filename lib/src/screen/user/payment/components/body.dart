@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dingo_clean/src/constant.dart';
-import 'package:dingo_clean/src/controller/payment_controller.dart';
+import 'package:dingo_clean/src/controller/paypal_payment.dart';
 import 'package:dingo_clean/src/default_button.dart';
 import 'package:dingo_clean/src/screen/user/receipt/receipt_screen.dart';
 import 'package:dingo_clean/src/theme.dart';
@@ -11,6 +11,7 @@ import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:pay/pay.dart';
 import 'package:http/http.dart' as http;
 
 class Body extends StatefulWidget {
@@ -20,7 +21,7 @@ class Body extends StatefulWidget {
   State<Body> createState() => _BodyState();
 }
 
-enum SingingCharacter { creditCard, paypal, googlePay }
+enum SingingCharacter { creditCard, paypal }
 
 class _BodyState extends State<Body> {
   SingingCharacter? _character = SingingCharacter.creditCard;
@@ -76,26 +77,6 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 15),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [shadowList()]),
-                  child: ListTile(
-                    title: const Text('Google Pay'),
-                    trailing: const Icon(Iconsax.card),
-                    leading: Radio<SingingCharacter>(
-                      value: SingingCharacter.googlePay,
-                      groupValue: _character,
-                      onChanged: (SingingCharacter? value) {
-                        setState(() {
-                          _character = value;
-                        });
-                      },
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -113,10 +94,18 @@ class _BodyState extends State<Body> {
                       makeCardPayment();
                       break;
                     case SingingCharacter.paypal:
-                    makePaypalPayment();
-                      break;
-                    case SingingCharacter.googlePay:
-                      makeGooglePayPayment();
+                      setState(() {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => PaypalPayment(
+                              onFinish: (number) async {
+                                // payment done
+                                print('order id: ' + number);
+                              },
+                            ),
+                          ),
+                        );
+                      });
                       break;
                     case null:
                   }
@@ -221,20 +210,4 @@ class _BodyState extends State<Body> {
       print('$e');
     }
   }
-
-  Future<void> makePaypalPayment() async {
-    var request = BraintreeDropInRequest(
-        tokenizationKey: "sandbox_w3m8m7ks_fmjw3c96ctgmmvbn",
-        collectDeviceData: true,
-        paypalRequest:
-            BraintreePayPalRequest(amount: '10', displayName: 'Afif'),
-        cardEnabled: true);
-    BraintreeDropInResult? result = await BraintreeDropIn.start(request);
-    if (result != null) {
-      print(result.paymentMethodNonce.description);
-      print(result.paymentMethodNonce.nonce);
-    }
-  }
-
-  void makeGooglePayPayment() {}
 }

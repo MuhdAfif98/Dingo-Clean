@@ -43,6 +43,9 @@ dependencies:
   http: ^0.13.4
   get: ^4.6.1
   flutter_braintree: ^2.3.1
+  http_auth: ^1.0.1
+  webview_flutter: ^3.0.2
+  pay: ^1.0.8
   
 
 dev_dependencies:
@@ -60,4 +63,5 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/
     - assets/images/house_type/

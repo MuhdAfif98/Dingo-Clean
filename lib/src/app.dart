@@ -100,8 +100,6 @@ class MyApp extends StatelessWidget {
                     return const SignUpPageScreen();
                   case VerificationCodeScreen.routeName:
                     return const VerificationCodeScreen();
-                  case UpdateProfileScreen.routeName:
-                    return const UpdateProfileScreen();
                   case SignUp2Screen.routeName:
                     return const SignUp2Screen();
                   case SettingScreen.routeName:
@@ -115,11 +113,9 @@ class MyApp extends StatelessWidget {
                   case BookingHistoryScreen.routeName:
                     return const BookingHistoryScreen();
                   case Booking1Screen.routeName:
-                    return const Booking1Screen();
+                    return Booking1Screen();
                   case Booking2Screen.routeName:
                     return const Booking2Screen();
-                  case PaymentScreen.routeName:
-                    return const PaymentScreen();
                   case ReceiptScreen.routeName:
                     return const ReceiptScreen();
                   case HomepageScreen.routeName:

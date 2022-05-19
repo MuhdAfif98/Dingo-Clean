@@ -76,6 +76,15 @@ TextStyle textStyleMedium() {
   );
 }
 
+TextStyle textStyleHintView() {
+  return const TextStyle(
+    color: Colors.black,
+    fontSize: 14,
+    fontFamily: "Poppins",
+    fontWeight: FontWeight.w500,
+  );
+}
+
 TextStyle textStyleHeaderBold() {
   return const TextStyle(
     color: primaryColor,

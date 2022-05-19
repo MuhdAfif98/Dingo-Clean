@@ -1,11 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:dingo_clean/src/constant.dart';
+import 'package:dingo_clean/src/model/user.dart';
 import 'package:dingo_clean/src/screen/user/payment/payment_screen.dart';
+import 'package:dingo_clean/src/screen/user/test/test.dart';
+import 'package:dingo_clean/src/services/auth.dart';
 import 'package:dingo_clean/src/theme.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scale_tap/flutter_scale_tap.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:intl/intl.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -15,23 +21,35 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final firestore = FirebaseFirestore.instance;
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _contactNoController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+
+  late String _uid;
   int _currentStep = 0;
   final DatePickerController _controller = DatePickerController();
-  DateTime _selectedValue = DateTime.now();
+  String _selectedValue = '';
   String _selectedHour = '08:00';
   final ItemScrollController _scrollController = ItemScrollController();
   String? _selectedService;
   String? _selectedHouse;
-  late int servicePrice, housePrice, totalPrice;
+  dynamic _servicePrice, _housePrice, _totalPrice;
+  String userID = "";
+  late int totalPrice;
+  bool isLoading = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final List<String> _hours = <String>[
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
+    '08:00 am',
+    '09:00 am',
+    '10:00 am',
+    '11:00 am',
+    '12:00 pm',
+    '13:00 pm',
+    '14:00 pm',
   ];
 
   final _services = [
@@ -43,10 +61,32 @@ class _BodyState extends State<Body> {
   ];
 
   String? selectedValue;
-  List<String> items = [
+  List<String> yesNo = [
     'Yes',
     'No',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
+  getUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    User? user = _auth.currentUser;
+    _uid = user!.uid;
+    final DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('user').doc(_uid).get();
+    _nameController.text = userDoc.get('name');
+    _contactNoController.text = userDoc.get('contactNo');
+    _addressController.text = userDoc.get('address');
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +105,14 @@ class _BodyState extends State<Body> {
 
         if (isLastStep) {
           debugPrint("Completed");
-          Navigator.restorablePushNamed(context, PaymentScreen.routeName);
+          serviceBooking();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PaymentScreen(
+                  totalPrice: _totalPrice,
+                ),
+              ));
         } else {
           setState(() {
             _currentStep += 1;
@@ -105,7 +152,7 @@ class _BodyState extends State<Body> {
         Step(
           state: _currentStep > 0 ? StepState.complete : StepState.indexed,
           isActive: _currentStep >= 0,
-          title: const Text("Cleaning Service"),
+          title: const Text(""),
           content: Column(
             children: [
               Container(
@@ -118,6 +165,7 @@ class _BodyState extends State<Body> {
                 height: 10,
               ),
               FormField<String>(
+                initialValue: "Please select",
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
                     decoration: InputDecoration(
@@ -126,27 +174,32 @@ class _BodyState extends State<Body> {
                             color: Colors.redAccent, fontSize: 16.0),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
-                    isEmpty: _selectedService == '',
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: _selectedService,
                         isDense: true,
                         onChanged: (newValue) {
+                          _selectedService = newValue;
+                          state.didChange(newValue);
                           setState(() {
                             if (_selectedService == "Basic House Cleaning") {
-                              servicePrice = 100;
+                              _servicePrice = int.parse('110');
+                              assert(_servicePrice is int);
+                              //var total = _servicePrice+1;
+                              //print(total);
                             } else if (_selectedService == "Deep Cleaning") {
-                              servicePrice = 110;
+                              _servicePrice = int.parse('120');
+                              assert(_servicePrice is int);
                             } else if (_selectedService == "Laundry Cleaning") {
-                              servicePrice = 120;
+                              _servicePrice = int.parse('130');
+                              assert(_servicePrice is int);
                             } else if (_selectedService == "Green Cleaning") {
-                              servicePrice = 130;
+                              _servicePrice = int.parse('140');
+                              assert(_servicePrice is int);
                             } else if (_selectedService == "Sanitization") {
-                              servicePrice = 150;
+                              _servicePrice = int.parse('150');
+                              assert(_servicePrice is int);
                             }
-                            _selectedService = newValue;
-                            state.didChange(newValue);
-                            print(servicePrice);
                           });
                         },
                         items: _services.map((String value) {
@@ -213,7 +266,9 @@ class _BodyState extends State<Body> {
                 onDateChange: (date) {
                   // New date selected
                   setState(() {
-                    _selectedValue = date;
+                    DateTime now = DateTime.now();
+                    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+                    _selectedValue = formattedDate;
                   });
                 },
               ),
@@ -257,10 +312,6 @@ class _BodyState extends State<Body> {
                       );
                     }),
               ),
-              Text(_selectedHour.toString()),
-              Text(_selectedValue.toString()),
-              Text(_selectedService.toString()),
-              Text(_selectedHouse.toString()),
               const SizedBox(
                 height: 10,
               ),
@@ -270,7 +321,7 @@ class _BodyState extends State<Body> {
         Step(
             state: _currentStep > 1 ? StepState.complete : StepState.indexed,
             isActive: _currentStep >= 1,
-            title: const Text("Detailed Information"),
+            title: const Text(""),
             content: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(
@@ -294,16 +345,19 @@ class _BodyState extends State<Body> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16))),
                         TextFormField(
+                          controller: _nameController,
                           style: textStyleNormal(primaryColor),
                           decoration: defaultInputDecoration("Name"),
                         ),
                         const SizedBox(height: 20),
                         TextFormField(
+                          controller: _contactNoController,
                           style: textStyleNormal(primaryColor),
                           decoration: defaultInputDecoration("Contact Number"),
                         ),
                         const SizedBox(height: 20),
                         TextFormField(
+                          controller: _addressController,
                           style: textStyleNormal(primaryColor),
                           decoration: defaultInputDecoration("Address"),
                         ),
@@ -312,56 +366,372 @@ class _BodyState extends State<Body> {
                   ),
                   const SizedBox(height: 15),
                   //Precaution Measure
-                  Container(
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [shadowList()],
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.only(left: 5, bottom: 10),
-                            child: const Text("Precaution Measure",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16))),
-                        precautionQuestion("Will you be at home?"),
-                        precautionQuestion("Is parking available?"),
-                        precautionQuestion("Any pets?"),
-                        precautionQuestion("Any chemical allergic?"),
-                        precautionQuestion("After service sanitize?"),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.all(15.0),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     boxShadow: [shadowList()],
+                  //   ),
+                  //   child: Column(
+                  //     children: [
+                  //       Container(
+                  //           alignment: Alignment.centerLeft,
+                  //           padding: const EdgeInsets.only(left: 5, bottom: 10),
+                  //           child: const Text("Precaution Measure",
+                  //               style: TextStyle(
+                  //                   fontWeight: FontWeight.bold,
+                  //                   fontSize: 16))),
+                  //       Padding(
+                  //         padding: const EdgeInsets.all(3.0),
+                  //         child: Row(
+                  //           children: [
+                  //             Expanded(
+                  //                 flex: 4, child: Text("Will you be at home?")),
+                  //             Expanded(
+                  //               flex: 2,
+                  //               child: DropdownButtonHideUnderline(
+                  //                 child: DropdownButton2(
+                  //                   isExpanded: true,
+                  //                   hint: Row(
+                  //                     children: const [
+                  //                       Expanded(
+                  //                         child: Text(
+                  //                           'Select',
+                  //                           style: TextStyle(
+                  //                             fontSize: 14,
+                  //                             fontWeight: FontWeight.w400,
+                  //                             color: Colors.black,
+                  //                           ),
+                  //                           overflow: TextOverflow.ellipsis,
+                  //                         ),
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                   items: yesNo
+                  //                       .map((item) => DropdownMenuItem<String>(
+                  //                             value: item,
+                  //                             child: Text(
+                  //                               item,
+                  //                               style: const TextStyle(
+                  //                                 fontSize: 14,
+                  //                                 color: Colors.black,
+                  //                               ),
+                  //                               overflow: TextOverflow.ellipsis,
+                  //                             ),
+                  //                           ))
+                  //                       .toList(),
+                  //                   value: selectedValue,
+                  //                   onChanged: (value) {
+                  //                     setState(() {
+                  //                       selectedValue = value as String;
+                  //                     });
+                  //                   },
+                  //                   icon: const Icon(
+                  //                     Icons.arrow_forward_ios_outlined,
+                  //                   ),
+                  //                   iconSize: 14,
+                  //                   iconEnabledColor: Colors.black,
+                  //                   iconDisabledColor: Colors.grey,
+                  //                   buttonHeight: 30,
+                  //                   buttonWidth: 30,
+                  //                   buttonPadding: const EdgeInsets.only(
+                  //                       left: 14, right: 14),
+                  //                   buttonDecoration: BoxDecoration(
+                  //                     borderRadius: BorderRadius.circular(5),
+                  //                     border: Border.all(
+                  //                       color: Colors.black26,
+                  //                     ),
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                   buttonElevation: 2,
+                  //                   itemHeight: 25,
+                  //                   dropdownDecoration: BoxDecoration(
+                  //                     borderRadius: BorderRadius.circular(5),
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                   dropdownElevation: 8,
+                  //                   scrollbarRadius: const Radius.circular(40),
+                  //                   scrollbarThickness: 6,
+                  //                   scrollbarAlwaysShow: true,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //       Padding(
+                  //         padding: const EdgeInsets.all(3.0),
+                  //         child: Row(
+                  //           children: [
+                  //             Expanded(
+                  //                 flex: 4, child: Text("Is parking available?")),
+                  //             Expanded(
+                  //               flex: 2,
+                  //               child: DropdownButtonHideUnderline(
+                  //                 child: DropdownButton2(
+                  //                   isExpanded: true,
+                  //                   hint: Row(
+                  //                     children: const [
+                  //                       Expanded(
+                  //                         child: Text(
+                  //                           'Select',
+                  //                           style: TextStyle(
+                  //                             fontSize: 14,
+                  //                             fontWeight: FontWeight.w400,
+                  //                             color: Colors.black,
+                  //                           ),
+                  //                           overflow: TextOverflow.ellipsis,
+                  //                         ),
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                   items: yesNo
+                  //                       .map((item) => DropdownMenuItem<String>(
+                  //                             value: item,
+                  //                             child: Text(
+                  //                               item,
+                  //                               style: const TextStyle(
+                  //                                 fontSize: 14,
+                  //                                 color: Colors.black,
+                  //                               ),
+                  //                               overflow: TextOverflow.ellipsis,
+                  //                             ),
+                  //                           ))
+                  //                       .toList(),
+                  //                   value: selectedValue,
+                  //                   onChanged: (value) {
+                  //                     setState(() {
+                  //                       selectedValue = value as String;
+                  //                     });
+                  //                   },
+                  //                   icon: const Icon(
+                  //                     Icons.arrow_forward_ios_outlined,
+                  //                   ),
+                  //                   iconSize: 14,
+                  //                   iconEnabledColor: Colors.black,
+                  //                   iconDisabledColor: Colors.grey,
+                  //                   buttonHeight: 30,
+                  //                   buttonWidth: 30,
+                  //                   buttonPadding: const EdgeInsets.only(
+                  //                       left: 14, right: 14),
+                  //                   buttonDecoration: BoxDecoration(
+                  //                     borderRadius: BorderRadius.circular(5),
+                  //                     border: Border.all(
+                  //                       color: Colors.black26,
+                  //                     ),
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                   buttonElevation: 2,
+                  //                   itemHeight: 25,
+                  //                   dropdownDecoration: BoxDecoration(
+                  //                     borderRadius: BorderRadius.circular(5),
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                   dropdownElevation: 8,
+                  //                   scrollbarRadius: const Radius.circular(40),
+                  //                   scrollbarThickness: 6,
+                  //                   scrollbarAlwaysShow: true,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //       precautionQuestion("Any pets?"),
+                  //       precautionQuestion("Any chemical allergic?"),
+                  //       precautionQuestion("After service sanitize?"),
+                  //     ],
+                  //   ),
+                  // ),
                   const SizedBox(height: 15),
                 ],
               ),
-            ))
+            )),
+        Step(
+            state: _currentStep > 2 ? StepState.complete : StepState.indexed,
+            isActive: _currentStep >= 2,
+            title: const Text(""),
+            content: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(15),
+                    margin: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [shadowList()]),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "THANK YOU!",
+                          style: textStyleBold(Colors.black, 18),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text("Your service already processed",
+                            style: textStyleNormal(Colors.black, fontsize: 15)),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text("Please wait for the worker patiently",
+                            style: textStyleNormal(Colors.black, fontsize: 15)),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "DATE",
+                              textAlign: TextAlign.center,
+                              style: textStyleBold(Colors.black, 14),
+                            )),
+                            Expanded(
+                                child: Text(
+                              "TIME",
+                              textAlign: TextAlign.center,
+                              style: textStyleBold(Colors.black, 14),
+                            ))
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "30/12/2022",
+                              textAlign: TextAlign.center,
+                              style: textStyleNormal(Colors.black),
+                            )),
+                            Expanded(
+                                child: Text(
+                              "2.31 PM",
+                              textAlign: TextAlign.center,
+                              style: textStyleNormal(Colors.black),
+                            ))
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "NAME",
+                              textAlign: TextAlign.center,
+                              style: textStyleBold(Colors.black, 14),
+                            )),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "Muhammad Afif bin Ab Rahman",
+                              textAlign: TextAlign.center,
+                              style: textStyleNormal(Colors.black),
+                            )),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "TOTAL",
+                              textAlign: TextAlign.center,
+                              style: textStyleBold(Colors.black, 14),
+                            )),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "RM 30.25",
+                              textAlign: TextAlign.center,
+                              style: textStyleNormal(Colors.black),
+                            )),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "PAYMENT METHOD",
+                              textAlign: TextAlign.center,
+                              style: textStyleBold(Colors.black, 14),
+                            )),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "Credit Card",
+                              textAlign: TextAlign.center,
+                              style: textStyleNormal(Colors.black),
+                            )),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                )))
       ];
 
   ScaleTap houseType(String image, houseType) {
     return ScaleTap(
       onPressed: () {
         setState(() {
-          if (_selectedHouse == "Bungalow") {
-            housePrice = 100;
-          } else if (_selectedHouse == "Semi-D") {
-            housePrice = 110;
-          } else if (_selectedHouse == "Terrace") {
-            housePrice = 120;
-          } else if (_selectedHouse == "Apartment") {
-            housePrice = 130;
-          } else if (_selectedHouse == "Condo") {
-            housePrice = 150;
-          }
           _selectedHouse = houseType;
+          if (_selectedHouse == "Bungalow") {
+            _housePrice = int.parse('110');
+            assert(_housePrice is int);
+          } else if (_selectedHouse == "Semi-D") {
+            _housePrice = int.parse('120');
+            assert(_housePrice is int);
+          } else if (_selectedHouse == "Terrace") {
+            _housePrice = int.parse('130');
+            assert(_housePrice is int);
+          } else if (_selectedHouse == "Apartment") {
+            _housePrice = int.parse('140');
+            assert(_housePrice is int);
+          } else if (_selectedHouse == "Condo") {
+            _housePrice = int.parse('150');
+            assert(_housePrice is int);
+          }
+
           print(_selectedHouse);
-          print(housePrice);
-          calculateTotalPrice();
-          print(totalPrice);
+          print(_servicePrice);
+          print(_housePrice);
+          _totalPrice = _housePrice + _servicePrice;
+          print(_totalPrice);
         });
       },
       child: Card(
@@ -426,7 +796,7 @@ class _BodyState extends State<Body> {
                     ),
                   ],
                 ),
-                items: items
+                items: yesNo
                     .map((item) => DropdownMenuItem<String>(
                           value: item,
                           child: Text(
@@ -503,7 +873,20 @@ class _BodyState extends State<Body> {
         hintText: hintText);
   }
 
-  void calculateTotalPrice() {
-    totalPrice = housePrice + servicePrice;
+//Insert data into Firebase
+  void serviceBooking() {
+    User? getUser = FirebaseAuth.instance.currentUser;
+    userID = getUser!.uid;
+    firestore.collection("booking").add({
+      "User ID": userID,
+      "Service type": _selectedService,
+      "House type": _selectedHouse,
+      "Date": _selectedValue,
+      "Time": _selectedHour,
+      "Service Price": _servicePrice,
+      "House Price": _housePrice,
+      "Total Price": _totalPrice,
+      "Payment status": "Pending",
+    });
   }
 }

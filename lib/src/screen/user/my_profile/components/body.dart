@@ -84,26 +84,31 @@ class _BodyState extends State<Body> {
             ),
             const SizedBox(height: 20),
             TextFormField(
+              readOnly: true,
               style: textStyleNormal(primaryColor),
               decoration: defaultInputDecoration(contactNo),
             ),
             const SizedBox(height: 20),
             TextFormField(
+              readOnly: true,
               style: textStyleNormal(primaryColor),
               decoration: defaultInputDecoration(address),
             ),
             const SizedBox(height: 20),
             TextFormField(
+              readOnly: true,
               style: textStyleNormal(primaryColor),
               decoration: defaultInputDecoration(city),
             ),
             const SizedBox(height: 20),
             TextFormField(
+              readOnly: true,
               style: textStyleNormal(primaryColor),
               decoration: defaultInputDecoration(state),
             ),
             const SizedBox(height: 20),
             TextFormField(
+              readOnly: true,
               style: textStyleNormal(primaryColor),
               decoration: defaultInputDecoration(postcode),
             ),
@@ -112,8 +117,11 @@ class _BodyState extends State<Body> {
             ),
             FloatingActionButton.extended(
               onPressed: () {
-                Navigator.restorablePushNamed(
-                    context, UpdateProfileScreen.routeName);
+                Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => UpdateProfileScreen(),
+                    ),
+                  );
               },
               label: Row(
                 children: const [
@@ -155,7 +163,7 @@ class _BodyState extends State<Body> {
       fillColor: lightPrimaryColor,
       filled: true,
       hintText: data,
-      hintStyle: textStyleMedium(),
+      hintStyle: textStyleHintView(),
     );
   }
 }

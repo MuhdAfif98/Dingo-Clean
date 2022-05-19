@@ -22,12 +22,7 @@ class _Booking1ScreenScreenState extends State<Booking1Screen> {
         color: Colors.transparent,
       ),
       body: Body(),
-      // bottomNavigationBar: Container(
-      //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      //     child: DefaultButton(
-      //       title: "Next",
-      //       press: () {Navigator.restorablePushNamed(context, Booking2Screen.routeName);},
-      //     )),
+
     );
   }
 }

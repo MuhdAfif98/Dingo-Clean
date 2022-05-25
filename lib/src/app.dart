@@ -1,4 +1,3 @@
-import 'package:dingo_clean/src/screen/admin/financial/financial_screen.dart';
 import 'package:dingo_clean/src/screen/admin/homepage/components/homepage_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password1/forgot_password1_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password2/forgot_password2_screen.dart';
@@ -24,6 +23,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
+import 'screen/admin/financial_service/financial_screen.dart';
+import 'screen/admin/sign_in_admin/sign_in_screen.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
@@ -90,6 +91,8 @@ class MyApp extends StatelessWidget {
                 switch (routeSettings.name) {
                   case SignInScreen.routeName:
                     return const SignInScreen();
+                  case SignInAdminScreen.routeName:
+                    return const SignInAdminScreen();
                   case ForgotPassword1Screen.routeName:
                     return const ForgotPassword1Screen();
                   case ForgotPassword2Screen.routeName:
@@ -122,8 +125,9 @@ class MyApp extends StatelessWidget {
                     return const HomepageScreen();
                   case HomepageAdminScreen.routeName:
                     return const HomepageAdminScreen();
-                  case FinancialScreen.routeName:
-                    return const FinancialScreen();
+
+                  case FinancialServiceScreen.routeName:
+                    return const FinancialServiceScreen();
                   case SplashScreen.routeName:
                   default:
                     return const SplashScreen();

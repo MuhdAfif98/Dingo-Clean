@@ -19,6 +19,7 @@ class PaymentScreen extends StatefulWidget {
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
+
 enum SingingCharacter { creditCard, paypal }
 
 class _PaymentScreenState extends State<PaymentScreen> {
@@ -109,7 +110,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               onFinish: (number) async {
                                 // payment done
                                 print('order id: ' + number);
-                              }, totalPrice: widget.totalPrice,
+                              },
+                              totalPrice: widget.totalPrice,
                             ),
                           ),
                         );
@@ -199,11 +201,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
             'payment intent' + paymentIntentData!['client_secret'].toString());
         print('payment intent' + paymentIntentData!['amount'].toString());
         print('payment intent' + paymentIntentData.toString());
-        updateStatus();
+
         //orderPlaceApi(paymentIntentData!['id'].toString());
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Paid successfully")));
-
+        updateStatus();
         paymentIntentData = null;
       }).onError((error, stackTrace) {
         print('Exception/DISPLAYPAYMENTSHEET==> $error $stackTrace');
@@ -220,14 +222,35 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  void updateStatus() {
+  Future<void> updateStatus() async {
     User? getUser = FirebaseAuth.instance.currentUser;
     userID = getUser!.uid;
-    firestore.collection("booking").doc(userID).update({
-      "Payment status": "Paid",
-    }).then((_) {
-      print("Successfully update payment status");
-      Navigator.restorablePushNamed(context, ReceiptScreen.routeName);
-    });
+
+    //Update booking collection
+    var collection = FirebaseFirestore.instance
+        .collection('booking')
+        .doc(userID)
+        .collection("service");
+    var querySnapshots = await collection.get();
+
+    //Update bookingAdmin collection
+    var adminCollection = FirebaseFirestore.instance.collection('bookingAdmin');
+
+    var queryAdmin = await collection.get();
+    for (var snapshot in queryAdmin.docs) {
+      var documentID = snapshot.id; // <-- Document ID
+      adminCollection.doc(documentID).update({
+        "Payment status": "Paid",
+      });
+    }
+    for (var snapshot in querySnapshots.docs) {
+      var documentID = snapshot.id; // <-- Document ID
+      collection.doc(documentID).update({
+        "Payment status": "Paid",
+      }).then((value) {
+        print("Successfully update payment status");
+        Navigator.restorablePushNamed(context, ReceiptScreen.routeName);
+      });
+    }
   }
 }

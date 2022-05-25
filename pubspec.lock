@@ -504,6 +504,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  number_animation:
+    dependency: "direct main"
+    description:
+      name: number_animation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   octo_image:
     dependency: transitive
     description:

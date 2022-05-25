@@ -1,10 +1,9 @@
 import 'package:dingo_clean/src/constant.dart';
 import 'package:dingo_clean/src/default_button.dart';
 import 'package:dingo_clean/src/screen/admin/homepage/components/homepage_screen.dart';
-import 'package:dingo_clean/src/screen/admin/sign_in_admin/sign_in_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password1/forgot_password1_screen.dart';
+import 'package:dingo_clean/src/screen/authentication/sign_in/sign_in_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/sign_up/sign_up_screen.dart';
-import 'package:dingo_clean/src/screen/user/homepage/components/homepage_screen.dart';
 import 'package:dingo_clean/src/services/auth.dart';
 import 'package:dingo_clean/src/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -72,6 +71,11 @@ class _BodyState extends State<Body> {
                               text: "lean",
                               style: TextStyle(color: secondaryColor)),
                         ]),
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    "Administrator",
+                    style: textStyleNormal(secondaryColor),
                   ),
                   const SizedBox(height: 14),
                   Text(
@@ -165,52 +169,21 @@ class _BodyState extends State<Body> {
                     title: "Sign In",
                     loadingText: "Sign you in . . .",
                     press: () {
-                      if (_formKey.currentState!.validate()) {
-                        signInUser();
-                      }
-                      debugPrint(email);
+                      Navigator.restorablePushNamed(context, HomepageAdminScreen.routeName);
+                      // if (_formKey.currentState!.validate()) {
+                      //   signInAdmin();
+                      // }
+                      // debugPrint(email);
                     },
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account?",
-                            style: textStyleNormal(Colors.black),
-                          ),
-                          const SizedBox(width: 5),
-                          ScaleTap(
-                            onPressed: () {
-                              Navigator.restorablePushNamed(
-                                  context, SignUpPageScreen.routeName);
-                            },
-                            child: RichText(
-                              text: const TextSpan(
-                                text: "Sign Up",
-                                style: TextStyle(
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  const SizedBox(height: 40),
                   ScaleTap(
                     onPressed: () {
                       Navigator.restorablePushNamed(
-                          context, SignInAdminScreen.routeName);
+                          context, SignInScreen.routeName);
                     },
                     child: Text(
-                      "Go to Admin Page",
+                      "Go to User Page ",
                       style: textStyleBold(primaryColor, 14),
                     ),
                   )
@@ -223,8 +196,8 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void signInUser() async {
-    dynamic result = await _auth.loginIntoAccount(
+  void signInAdmin() async {
+    dynamic result = await _auth.loginAdminAccount(
         _emailController.text, _passwordController.text);
     if (result == null) {
       debugPrint('Sign in error. could not be able to login');
@@ -232,7 +205,7 @@ class _BodyState extends State<Body> {
       _emailController.clear();
       _passwordController.clear();
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const HomepageScreen()));
+          MaterialPageRoute(builder: (context) => const HomepageAdminScreen()));
     }
   }
 }

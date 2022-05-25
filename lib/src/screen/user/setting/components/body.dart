@@ -3,6 +3,7 @@ import 'package:dingo_clean/src/screen/user/change_language/change_language_scre
 import 'package:dingo_clean/src/screen/user/change_password/change_password_screen.dart';
 import 'package:dingo_clean/src/screen/user/update_profile/update_profile_screen.dart';
 import 'package:dingo_clean/src/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scale_tap/flutter_scale_tap.dart';
@@ -20,14 +21,20 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return Column(children: [
       buttonSetting(const Icon(Iconsax.user), "Update Profile", () {
-        Navigator.restorablePushNamed(context, UpdateProfileScreen.routeName);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UpdateProfileScreen(),
+            ));
       }),
       buttonSetting(const Icon(Iconsax.security), "Change Password", () {
         Navigator.restorablePushNamed(context, ChangePasswordScreen.routeName);
       }),
-      buttonSetting(const Icon(Iconsax.flag), "Change Language", () {Navigator.restorablePushNamed(context, ChangeLanguageScreen.routeName);}),
+      buttonSetting(const Icon(Iconsax.flag), "Change Language", () {
+        Navigator.restorablePushNamed(context, ChangeLanguageScreen.routeName);
+      }),
       buttonSetting(const Icon(Iconsax.logout), "Logout", () {
-        Navigator.restorablePushNamed(context, SignInScreen.routeName);
+        _signOut();
       })
     ]);
   }
@@ -63,6 +70,14 @@ class _BodyState extends State<Body> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SignInScreen()),
     );
   }
 }

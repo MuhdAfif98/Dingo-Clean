@@ -45,8 +45,17 @@ class AuthService {
     }
   }
 
-//Sign in with email and password
+//Sign in for user with email and password
   Future loginIntoAccount(String emailAddress, String password) async{
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(email: emailAddress, password: password);
+      return result.user;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+//Sign in for admin
+  Future loginAdminAccount(String emailAddress, String password) async{
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: emailAddress, password: password);
       return result.user;

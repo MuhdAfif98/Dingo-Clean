@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dingo_clean/src/constant.dart';
+import 'package:dingo_clean/src/model/user.dart';
 import 'package:dingo_clean/src/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,9 +16,9 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  String _uid = '';
+  String userID = '';
+  User? auth = FirebaseAuth.instance.currentUser;
+  late final String _uid = auth!.uid;
 
   String name = '';
   String image = '';
@@ -27,28 +28,10 @@ class _BodyState extends State<Body> {
   String houseType = '';
 
   @override
-  void initState() {
-    super.initState();
-    getData().whenComplete(() {
-      setState(() {});
-    });
-  }
-
-  Future<void> getData() async {
-    final DocumentSnapshot userDoc =
-        await FirebaseFirestore.instance.collection('booking').doc().get();
-    name = userDoc.get('name');
-    image = userDoc.get('image');
-    contactNo = userDoc.get('contactNo');
-    address = userDoc.get('address');
-    city = userDoc.get('city');
-  }
-
-  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('booking')
+            .collection('booking').doc(_uid).collection("service")
             .where("User ID", isEqualTo: _uid)
             .where("Payment status", isEqualTo: "Paid")
             .snapshots(),
@@ -107,17 +90,24 @@ class _BodyState extends State<Body> {
                         child: Row(
                           children: [
                             if (houseType == "Apartment") ...[
-                              Image.asset("assets/images/house_type/apartment.png",)
+                              Image.asset(
+                                "assets/images/house_type/apartment.png",
+                              )
                             ] else if (houseType == "Semi-D") ...[
                               Image.asset("assets/images/house_type/semi-d.png")
                             ] else if (houseType == "Bungalow") ...[
-                              Image.asset("assets/images/house_type/bungalow.png")
+                              Image.asset(
+                                  "assets/images/house_type/bungalow.png")
                             ] else if (houseType == "Condominium") ...[
-                              Image.asset("assets/images/house_type/condominium.png")
+                              Image.asset(
+                                  "assets/images/house_type/condominium.png")
                             ] else if (houseType == "Terrace") ...[
-                              Image.asset("assets/images/house_type/terrace-house.png")
+                              Image.asset(
+                                  "assets/images/house_type/terraced-house.png")
                             ],
-                            SizedBox(width: 15,),
+                            SizedBox(
+                              width: 15,
+                            ),
                             Expanded(
                               child: ListTile(
                                 title: Text(serviceType),

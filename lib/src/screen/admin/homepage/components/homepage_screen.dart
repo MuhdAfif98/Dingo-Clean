@@ -1,10 +1,8 @@
 import 'package:dingo_clean/src/constant.dart';
-import 'package:dingo_clean/src/screen/admin/financial/financial_screen.dart';
-import 'package:dingo_clean/src/screen/user/booking_history/booking_history_screen.dart';
+import 'package:dingo_clean/src/screen/admin/financial_service/financial_screen.dart';
+import 'package:dingo_clean/src/screen/admin/user_booking/booking_history_screen.dart';
 import 'package:dingo_clean/src/screen/admin/homepage/components/body0.dart';
-import 'package:dingo_clean/src/screen/user/my_profile/my_profile_screen.dart';
 import 'package:dingo_clean/src/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -60,17 +58,17 @@ class _HomepageAdminScreenState extends State<HomepageAdminScreen> {
                 icon: Icon(Iconsax.dollar_circle),
                 label: "Financial"),
             BottomNavigationBarItem(
-                activeIcon: Icon(Iconsax.user),
-                icon: Icon(Iconsax.user),
-                label: "Profile"),
+                activeIcon: Icon(Iconsax.bookmark),
+                icon: Icon(Iconsax.bookmark),
+                label: "Booking"),
           ],
         ),
       ),
       body: (currentIndex == 0)
           ? const Body0()
           : (currentIndex == 1)
-              ? const FinancialScreen()
-              : const MyProfileScreen(),
+              ? const FinancialServiceScreen()
+              : const UserBookingScreen() ,
     );
   }
 }

@@ -24,7 +24,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  
+
   late String _uid;
 
   String name = '';
@@ -172,9 +172,7 @@ class _BodyState extends State<Body> {
                               boxShadow: [shadowList()],
                             ),
                           ),
-                          onPressed: () {
-                         
-                          },
+                          onPressed: () {},
                         ),
                       ),
                       const SizedBox(
@@ -241,9 +239,7 @@ class _BodyState extends State<Body> {
                               boxShadow: [shadowList()],
                             ),
                           ),
-                          onPressed: () {
-                 
-                          },
+                          onPressed: () {},
                         ),
                       ),
                       const SizedBox(
@@ -310,9 +306,7 @@ class _BodyState extends State<Body> {
                               boxShadow: [shadowList()],
                             ),
                           ),
-                          onPressed: () {
-                            
-                          },
+                          onPressed: () {},
                         ),
                       ),
                       const SizedBox(
@@ -353,7 +347,8 @@ class _BodyState extends State<Body> {
                   ),
                   FloatingActionButton.extended(
                     onPressed: () {
-                      Navigator.restorablePushNamed(context, Booking1Screen.routeName);
+                      Navigator.restorablePushNamed(
+                          context, Booking1Screen.routeName);
                     },
                     label: Row(
                       children: const [Icon(Iconsax.book), Text("Book Now")],
@@ -433,6 +428,9 @@ class _BodyState extends State<Body> {
 
   Future signOut() async {
     await _auth.signOut();
-    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SignInScreen()),
+    );
   }
 }

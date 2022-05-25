@@ -576,12 +576,12 @@ class _BodyState extends State<Body> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text("Your service already processed",
+                        Text("This is your service order",
                             style: textStyleNormal(Colors.black, fontsize: 15)),
                         const SizedBox(
                           height: 10,
                         ),
-                        Text("Please wait for the worker patiently",
+                        Text("Please check for the correct details",
                             style: textStyleNormal(Colors.black, fontsize: 15)),
                         const SizedBox(
                           height: 20,
@@ -609,13 +609,13 @@ class _BodyState extends State<Body> {
                           children: [
                             Expanded(
                                 child: Text(
-                              "30/12/2022",
+                              _selectedValue,
                               textAlign: TextAlign.center,
                               style: textStyleNormal(Colors.black),
                             )),
                             Expanded(
                                 child: Text(
-                              "2.31 PM",
+                              _selectedHour,
                               textAlign: TextAlign.center,
                               style: textStyleNormal(Colors.black),
                             ))
@@ -641,7 +641,7 @@ class _BodyState extends State<Body> {
                           children: [
                             Expanded(
                                 child: Text(
-                              "Muhammad Afif bin Ab Rahman",
+                              _nameController.text,
                               textAlign: TextAlign.center,
                               style: textStyleNormal(Colors.black),
                             )),
@@ -667,7 +667,7 @@ class _BodyState extends State<Body> {
                           children: [
                             Expanded(
                                 child: Text(
-                              "RM 30.25",
+                              "RM " + _totalPrice.toString() + ".00",
                               textAlign: TextAlign.center,
                               style: textStyleNormal(Colors.black),
                             )),
@@ -877,7 +877,19 @@ class _BodyState extends State<Body> {
   void serviceBooking() {
     User? getUser = FirebaseAuth.instance.currentUser;
     userID = getUser!.uid;
-    firestore.collection("booking").add({
+    firestore.collection("booking").doc(userID).collection("service").doc().set({
+      "User ID": userID,
+      "Service type": _selectedService,
+      "House type": _selectedHouse,
+      "Date": _selectedValue,
+      "Time": _selectedHour,
+      "Service Price": _servicePrice,
+      "House Price": _housePrice,
+      "Total Price": _totalPrice,
+      "Payment status": "Pending",
+    });
+
+    firestore.collection("bookingAdmin").doc().set({
       "User ID": userID,
       "Service type": _selectedService,
       "House type": _selectedHouse,

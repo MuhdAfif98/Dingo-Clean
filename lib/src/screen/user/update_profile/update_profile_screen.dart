@@ -184,31 +184,22 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               chooseImage();
             },
             child: FDottedLine(
-              width: double.infinity,
               color: textGray,
-              corner: FDottedLineCorner.all(15),
-              space: 13,
+              corner: FDottedLineCorner.all(70),
+              space: 10,
               strokeWidth: 2,
               dottedLength: 10,
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 80,
-                      vertical: 40,
-                    ),
+                    padding: EdgeInsets.all(8),
                     child: CircleAvatar(
-                      radius: 80,
+                      radius: 60,
                       backgroundImage: file == null
                           ? NetworkImage(_imageController.text)
                           : FileImage(file!) as ImageProvider,
                     ),
                   ),
-                  Text(
-                    "Upload Your Selfie",
-                    style: textStyleMedium(),
-                  ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),

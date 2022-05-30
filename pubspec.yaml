@@ -31,7 +31,7 @@ dependencies:
   lottie: ^1.2.2
   material_floating_search_bar: ^0.3.6
   pin_code_fields: ^7.3.0
-  scrollable_positioned_list: ^0.2.3
+  scrollable_positioned_list: ^0.3.2
   simple_animations: ^4.0.1
   url_launcher: ^6.0.20
   js: ^0.6.2
@@ -39,7 +39,7 @@ dependencies:
   image_picker: ^0.8.5
   firebase_storage: ^10.2.12
   easy_localization: ^3.0.0
-  flutter_stripe: ^2.5.0
+  flutter_stripe: ^3.0.2
   http: ^0.13.4
   get: ^4.6.1
   flutter_braintree: ^2.3.1
@@ -53,7 +53,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true

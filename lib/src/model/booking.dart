@@ -11,6 +11,9 @@ class Booking {
   String time;
   int totalPrice;
   String userID;
+  String clientName;
+  String clientAddress;
+  String clientContactNo;
 
   Booking(
       {required this.date,
@@ -21,7 +24,10 @@ class Booking {
       required this.serviceType,
       required this.time,
       required this.totalPrice,
-      required this.userID});
+      required this.userID,
+      required this.clientName,
+      required this.clientAddress,
+      required this.clientContactNo});
 
   // formatting for upload to Firbase when creating the trip
   Map<String, dynamic> toJson() => {
@@ -46,14 +52,9 @@ class Booking {
         serviceType = snapshot['Service type'],
         time = snapshot['Time'],
         totalPrice = snapshot['Total Price'],
-        userID = snapshot['User ID'];
+        userID = snapshot['User ID'],
+        clientName = snapshot["Client name"],
+        clientAddress = snapshot['Client Address'],
+        clientContactNo = snapshot['Client Contact'];
 
-  Map<String, Icon> types() => {
-        "car": Icon(Icons.directions_car, size: 50),
-        "bus": Icon(Icons.directions_bus, size: 50),
-        "train": Icon(Icons.train, size: 50),
-        "plane": Icon(Icons.airplanemode_active, size: 50),
-        "ship": Icon(Icons.directions_boat, size: 50),
-        "other": Icon(Icons.directions, size: 50),
-      };
 }

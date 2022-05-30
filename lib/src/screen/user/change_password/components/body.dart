@@ -100,7 +100,7 @@ class _BodyState extends State<Body> {
           padding: const EdgeInsets.all(20),
           child: DefaultButton(
               title: "Change Password",
-              color: primaryColor,
+              color: secondaryColor,
               press: () {
                 if (_formKey.currentState!.validate()) {
                   setState(() {

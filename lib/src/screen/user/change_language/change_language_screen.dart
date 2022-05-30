@@ -1,3 +1,4 @@
+import 'package:dingo_clean/src/screen/admin/setting/setting_screen.dart';
 import 'package:dingo_clean/src/screen/user/change_language/components/body.dart';
 import 'package:dingo_clean/src/theme_app_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,11 +15,14 @@ class ChangeLanguageScreen extends StatefulWidget {
 class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       appBar: ThemeAppBar(
         "Setting",
         color: Colors.transparent,
+        onBackPressed: (){
+          Navigator.restorablePushNamed(context, SettingScreen.routeName);
+        },
       ),
       body: Body(),
     );

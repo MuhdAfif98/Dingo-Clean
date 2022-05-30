@@ -1,6 +1,7 @@
 import 'package:dingo_clean/src/default_button.dart';
 import 'package:dingo_clean/src/screen/user/receipt/receipt_screen.dart';
 import 'package:dingo_clean/src/theme_app_bar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -231,7 +232,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         .collection('booking')
         .doc(userID)
         .collection("service");
-    var querySnapshots = await collection.get();
+    var querySnapshots = await collection.orderBy("Order created at",descending: true).limit(1).get();
 
     //Update bookingAdmin collection
     var adminCollection = FirebaseFirestore.instance.collection('bookingAdmin');

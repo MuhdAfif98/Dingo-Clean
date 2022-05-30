@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 
 Widget buildBookingCard(BuildContext context, DocumentSnapshot document) {
   final booking = Booking.fromSnapshot(document);
-  final tripType = booking.types();
 
   return ScaleTap(
     onPressed: () {},

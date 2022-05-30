@@ -1,6 +1,7 @@
 import 'package:dingo_clean/src/default_button.dart';
 import 'package:dingo_clean/src/screen/user/booking_1/components/body.dart';
 import 'package:dingo_clean/src/screen/user/booking_2/booking_2_screen.dart';
+import 'package:dingo_clean/src/screen/user/homepage/components/homepage_screen.dart';
 import 'package:dingo_clean/src/theme_app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -15,11 +16,14 @@ class Booking1Screen extends StatefulWidget {
 class _Booking1ScreenScreenState extends State<Booking1Screen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       appBar: ThemeAppBar(
         "Booking 1",
         color: Colors.transparent,
+        onBackPressed: (){
+          Navigator.restorablePushNamed(context, HomepageScreen.routeName);
+        },
       ),
       body: Body(),
 

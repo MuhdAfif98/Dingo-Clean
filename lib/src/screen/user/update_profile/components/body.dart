@@ -8,16 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class Body extends StatefulWidget {
-  
-  const Body({Key? key,}) : super(key: key);
- 
+  const Body({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Body> createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late String _uid;
 
@@ -81,28 +80,27 @@ class _BodyState extends State<Body> {
             const SizedBox(height: 20),
             TextFormField(
               controller: _nameController,
-              style: textStyleNormal(primaryColor),
+              style: textStyleNormal(secondaryColor),
               decoration: defaultInputDecoration("Name"),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              readOnly: _isEnabled,
-              style: textStyleNormal(primaryColor),
+              style: textStyleNormal(secondaryColor),
               decoration: defaultInputDecoration(contactNo),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              style: textStyleNormal(primaryColor),
+              style: textStyleNormal(secondaryColor),
               decoration: defaultInputDecoration(address),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              style: textStyleNormal(primaryColor),
+              style: textStyleNormal(secondaryColor),
               decoration: defaultInputDecoration(city),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              style: textStyleNormal(primaryColor),
+              style: textStyleNormal(secondaryColor),
               decoration: defaultInputDecoration(state),
             ),
             const SizedBox(height: 20),
@@ -144,7 +142,7 @@ class _BodyState extends State<Body> {
         ),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(color: primaryColor),
+            borderSide: const BorderSide(color: secondaryColor),
             gapPadding: 10),
         contentPadding: const EdgeInsets.fromLTRB(15, 15, 0, 15),
         border: OutlineInputBorder(

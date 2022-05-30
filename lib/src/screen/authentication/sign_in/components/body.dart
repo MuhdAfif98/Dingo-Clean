@@ -30,6 +30,13 @@ class _BodyState extends State<Body> {
   String email = '';
   String password = '';
   bool isloading = false;
+  bool _passwordVisible = true;
+
+  void _toggle(){
+    setState(() {
+      _passwordVisible = !_passwordVisible;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +121,7 @@ class _BodyState extends State<Body> {
                     validator: (val) =>
                         val!.isEmpty ? "Enter the password" : null,
                     style: textStyleNormal(primaryColor),
-                    obscureText: true,
+                    obscureText: _passwordVisible,
                     obscuringCharacter: "*",
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Iconsax.unlock),
@@ -137,9 +144,16 @@ class _BodyState extends State<Body> {
                       filled: true,
                       hintStyle: textStyleMedium(),
                       hintText: "Password",
-                      suffixIcon: const Icon(
-                        Iconsax.eye4,
-                        color: primaryColor,
+                      suffixIcon: IconButton(
+                        icon: const Icon(
+                          Iconsax.eye4,
+                          color: primaryColor,
+                        ),
+                        onPressed: (){
+                          setState(() {
+                            _toggle();
+                          });
+                        },
                       ),
                     ),
                   ),
@@ -211,7 +225,7 @@ class _BodyState extends State<Body> {
                     },
                     child: Text(
                       "Go to Admin Page",
-                      style: textStyleBold(primaryColor, 14),
+                      style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                   )
                 ],

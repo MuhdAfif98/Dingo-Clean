@@ -29,6 +29,7 @@ class _BodyState extends State<Body> {
   late String text = "";
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool _passwordVisible = true;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _imageController = TextEditingController();
@@ -41,6 +42,12 @@ class _BodyState extends State<Body> {
   final TextEditingController _postcodeController = TextEditingController();
 
   var password;
+
+  void _toggle(){
+    setState(() {
+      _passwordVisible = !_passwordVisible;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +77,18 @@ class _BodyState extends State<Body> {
                         controller: _emailController,
                         style: textStyleNormal(primaryColor),
                         decoration: defaultInputDecoration(
-                            "Email", const Icon(Iconsax.gallery)),
+                            "Email",
+                            const Icon(
+                              Iconsax.gallery,
+                            )),
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
+                        
                         controller: _passwordController,
                         style: textStyleNormal(primaryColor),
-                        decoration: passwordInputDecoration("Password"),
-                        obscureText: true,
+                        decoration: passwordInputDecoration("Password",Icon(Iconsax.lock)),
+                        obscureText: _passwordVisible,
                         obscuringCharacter: "*",
                         validator: (String? value) {
                           password = value;
@@ -92,8 +103,8 @@ class _BodyState extends State<Body> {
                       const SizedBox(height: 20),
                       TextFormField(
                         style: textStyleNormal(primaryColor),
-                        decoration: passwordInputDecoration("Confirm Password"),
-                        obscureText: true,
+                        decoration: passwordInputDecoration("Confirm Password",Icon(Iconsax.lock)),
+                        obscureText: _passwordVisible,
                         obscuringCharacter: "*",
                         validator: (String? value) {
                           if (value!.isEmpty) {
@@ -175,7 +186,7 @@ class _BodyState extends State<Body> {
 
   InputDecoration defaultInputDecoration(String? hintText, Widget? icon) {
     return InputDecoration(
-      prefix: icon,
+      prefixIcon: icon,
       counterText: "",
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30.0),
@@ -199,11 +210,21 @@ class _BodyState extends State<Body> {
     );
   }
 
-  InputDecoration passwordInputDecoration(String? hintText) {
+  InputDecoration passwordInputDecoration(String? hintText, Widget? icon) {
     return InputDecoration(
-        suffixIcon: const Icon(
-          Iconsax.eye4,
-          color: primaryColor,
+      prefixIcon: icon,
+        suffixIcon: IconButton(
+          icon: Icon(
+            _passwordVisible 
+            ? Iconsax.eye4 
+            : Iconsax.eye,
+            color: primaryColor,
+          ),
+          onPressed: (){
+            setState(() {
+              _toggle();
+            });
+          },
         ),
         counterText: "",
         enabledBorder: OutlineInputBorder(

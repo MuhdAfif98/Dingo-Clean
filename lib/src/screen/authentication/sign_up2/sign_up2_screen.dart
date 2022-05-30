@@ -1,4 +1,5 @@
 import 'package:dingo_clean/src/default_button.dart';
+import 'package:dingo_clean/src/screen/authentication/sign_up/sign_up_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/sign_up2/components/body.dart';
 import 'package:dingo_clean/src/screen/authentication/verification_code/verification_code_screen.dart';
 import 'package:dingo_clean/src/theme_app_bar.dart';
@@ -16,11 +17,14 @@ class SignUp2Screen extends StatefulWidget {
 class _SignUp2ScreenState extends State<SignUp2Screen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return  Scaffold(
       backgroundColor: Colors.white,
       appBar: ThemeAppBar(
         "Sign Up",
         color: Colors.transparent,
+        onBackPressed: (){
+          Navigator.restorablePushNamed(context, SignUpPageScreen.routeName);
+        },
       ),
       body: Body(),
     );

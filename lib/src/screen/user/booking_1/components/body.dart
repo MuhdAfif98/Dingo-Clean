@@ -260,14 +260,13 @@ class _BodyState extends State<Body> {
                 height: 80,
                 controller: _controller,
                 initialSelectedDate: DateTime.now(),
-                selectionColor: Colors.lightBlue,
-                deactivatedColor: Colors.grey.shade300,
+                selectionColor: primaryColor,
+                deactivatedColor: Color.fromARGB(255, 190, 190, 190),
                 selectedTextColor: Colors.black,
                 onDateChange: (date) {
                   // New date selected
                   setState(() {
-                    DateTime now = DateTime.now();
-                    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+                    String formattedDate = DateFormat('dd-MM-yyyy').format(date);
                     _selectedValue = formattedDate;
                   });
                 },
@@ -295,7 +294,7 @@ class _BodyState extends State<Body> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: _selectedHour == _hours[index]
-                                ? Colors.lightBlue
+                                ? primaryColor
                                 : Colors.white,
                           ),
                           child: Column(
@@ -304,7 +303,7 @@ class _BodyState extends State<Body> {
                               Text(
                                 _hours[index],
                                 style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
+                                    fontSize:18, fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
@@ -680,7 +679,7 @@ class _BodyState extends State<Body> {
                           children: [
                             Expanded(
                                 child: Text(
-                              "PAYMENT METHOD",
+                              "CONTACT NO",
                               textAlign: TextAlign.center,
                               style: textStyleBold(Colors.black, 14),
                             )),
@@ -693,7 +692,7 @@ class _BodyState extends State<Body> {
                           children: [
                             Expanded(
                                 child: Text(
-                              "Credit Card",
+                              _contactNoController.text,
                               textAlign: TextAlign.center,
                               style: textStyleNormal(Colors.black),
                             )),
@@ -741,9 +740,7 @@ class _BodyState extends State<Body> {
         child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: houseType == _selectedHouse
-                  ? Colors.blueAccent
-                  : Colors.white,
+              color: houseType == _selectedHouse ? primaryColor : Colors.white,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [shadowList()],
             ),
@@ -754,7 +751,11 @@ class _BodyState extends State<Body> {
                 const SizedBox(
                   height: 5,
                 ),
-                Center(child: Text(houseType)),
+                Center(
+                    child: Text(
+                  houseType,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )),
               ],
             )),
       ),
@@ -767,85 +768,6 @@ class _BodyState extends State<Body> {
       spreadRadius: 0,
       offset: const Offset(4, 4),
       color: Colors.black.withOpacity(0.2),
-    );
-  }
-
-  Padding precautionQuestion(String question) {
-    return Padding(
-      padding: const EdgeInsets.all(3.0),
-      child: Row(
-        children: [
-          Expanded(flex: 4, child: Text(question)),
-          Expanded(
-            flex: 2,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2(
-                isExpanded: true,
-                hint: Row(
-                  children: const [
-                    Expanded(
-                      child: Text(
-                        'Select',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                items: yesNo
-                    .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
-                    .toList(),
-                value: selectedValue,
-                onChanged: (value) {
-                  setState(() {
-                    selectedValue = value as String;
-                  });
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                ),
-                iconSize: 14,
-                iconEnabledColor: Colors.black,
-                iconDisabledColor: Colors.grey,
-                buttonHeight: 30,
-                buttonWidth: 30,
-                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: Colors.black26,
-                  ),
-                  color: Colors.white,
-                ),
-                buttonElevation: 2,
-                itemHeight: 25,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.white,
-                ),
-                dropdownElevation: 8,
-                scrollbarRadius: const Radius.circular(40),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -877,7 +799,12 @@ class _BodyState extends State<Body> {
   void serviceBooking() {
     User? getUser = FirebaseAuth.instance.currentUser;
     userID = getUser!.uid;
-    firestore.collection("booking").doc(userID).collection("service").doc().set({
+    firestore
+        .collection("booking")
+        .doc(userID)
+        .collection("service")
+        .doc()
+        .set({
       "User ID": userID,
       "Service type": _selectedService,
       "House type": _selectedHouse,
@@ -887,6 +814,10 @@ class _BodyState extends State<Body> {
       "House Price": _housePrice,
       "Total Price": _totalPrice,
       "Payment status": "Pending",
+      "Client name": _nameController.text,
+      "Client Contact":_contactNoController.text,
+      "Client Address":_addressController.text,
+      "Order created at": DateTime.now(),
     });
 
     firestore.collection("bookingAdmin").doc().set({
@@ -899,6 +830,10 @@ class _BodyState extends State<Body> {
       "House Price": _housePrice,
       "Total Price": _totalPrice,
       "Payment status": "Pending",
+      "Client name": _nameController.text,
+      "Client Contact":_contactNoController.text,
+      "Client Address":_addressController.text,
+      "Order created at": DateTime.now(),
     });
   }
 }

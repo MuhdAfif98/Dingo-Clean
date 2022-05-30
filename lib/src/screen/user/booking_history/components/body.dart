@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dingo_clean/src/constant.dart';
 import 'package:dingo_clean/src/model/user.dart';
+import 'package:dingo_clean/src/screen/user/booking_details/booking_details_screen.dart';
 import 'package:dingo_clean/src/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scale_tap/flutter_scale_tap.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:number_animation/number_animation.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -31,7 +33,9 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('booking').doc(_uid).collection("service")
+            .collection('booking')
+            .doc(_uid)
+            .collection("service")
             .where("User ID", isEqualTo: _uid)
             .where("Payment status", isEqualTo: "Paid")
             .snapshots(),
@@ -53,6 +57,7 @@ class _BodyState extends State<Body> {
                     document['Time'],
                     document['House type'],
                     document['Total Price'],
+                    document["Order created at"]
                   )
                 ],
               );
@@ -62,9 +67,15 @@ class _BodyState extends State<Body> {
   }
 
   ScaleTap buttonSetting(
-      String serviceType, status, date, time, houseType, int totalPrice) {
+      String serviceType, status, date, time, houseType, int totalPrice, Timestamp createdAt) {
     return ScaleTap(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    BookingDetailsScreen(createdAt: createdAt)));
+      },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Container(
@@ -133,13 +144,15 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 Expanded(
-                    flex: 1,
-                    child: Text(
-                      "RM " + totalPrice.toString(),
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                    )),
+                  child: NumberAnimation(
+                    decimalPoint: 0,
+                    before: "RM ",
+                    start: 0, // default is 0, can remove
+                    end: totalPrice,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    duration: Duration(milliseconds: 2000),
+                  ),
+                ),
               ],
             ),
           ),

@@ -22,11 +22,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   MyUser? currentUser;
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return  Scaffold(
       backgroundColor: Colors.white,
       appBar: ThemeAppBar(
         "My Profile",
         color: Colors.transparent,
+        onBackPressed: (){
+          Navigator.restorablePushNamed(context, HomepageScreen.routeName);
+        },
         primaryBg: false,
       ),
       body: Body(),

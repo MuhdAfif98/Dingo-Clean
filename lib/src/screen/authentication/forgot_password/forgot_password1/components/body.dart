@@ -120,7 +120,7 @@ class _BodyState extends State<Body> {
       print(e);
 
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Error occurs")));
+          .showSnackBar(const SnackBar(content: Text("Email is not valid")));
       Navigator.of(context).pop();
     }
   }

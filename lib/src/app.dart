@@ -9,6 +9,7 @@ import 'package:dingo_clean/src/screen/authentication/verification_code/verifica
 import 'package:dingo_clean/src/screen/splash/splash_screen.dart';
 import 'package:dingo_clean/src/screen/user/booking_1/booking_1_screen.dart';
 import 'package:dingo_clean/src/screen/user/booking_2/booking_2_screen.dart';
+import 'package:dingo_clean/src/screen/user/booking_details/booking_details_screen.dart';
 import 'package:dingo_clean/src/screen/user/booking_history/booking_history_screen.dart';
 import 'package:dingo_clean/src/screen/user/change_language/change_language_screen.dart';
 import 'package:dingo_clean/src/screen/user/change_password/change_password_screen.dart';
@@ -121,6 +122,7 @@ class MyApp extends StatelessWidget {
                     return const Booking2Screen();
                   case ReceiptScreen.routeName:
                     return const ReceiptScreen();
+         
                   case HomepageScreen.routeName:
                     return const HomepageScreen();
                   case HomepageAdminScreen.routeName:

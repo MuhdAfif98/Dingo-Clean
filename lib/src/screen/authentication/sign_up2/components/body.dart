@@ -220,30 +220,17 @@ class _BodyState extends State<Body> {
             child: FDottedLine(
               width: double.infinity,
               color: textGray,
-              corner: FDottedLineCorner.all(15),
-              space: 13,
+              corner: FDottedLineCorner.all(70),
+              space: 10,
               strokeWidth: 2,
               dottedLength: 10,
               child: Column(
-                children: [
+                children: const [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 80,
-                      vertical: 40,
-                    ),
-                    child: CircleAvatar(
-                      radius: 80,
-                      backgroundImage: file == null
-                          ? const NetworkImage(
-                              'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FFile%3ASample_User_Icon.png&psig=AOvVaw0zn7ghlbG6NVHaZW3ZY9Ub&ust=1650167726808000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCICQt_vXl_cCFQAAAAAdAAAAABAI')
-                          : FileImage(file!) as ImageProvider,
-                    ),
+                    padding: EdgeInsets.all(20),
+                    child: Icon(Iconsax.user,size: 85,color: disabledText,)
                   ),
-                  Text(
-                    "Upload Your Selfie",
-                    style: textStyleMedium(),
-                  ),
-                  const SizedBox(height: 20),
+  
                 ],
               ),
             ),

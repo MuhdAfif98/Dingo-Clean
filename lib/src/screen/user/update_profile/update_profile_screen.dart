@@ -76,6 +76,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       appBar: ThemeAppBar(
         "Update Profile",
         color: Colors.transparent,
+        onBackPressed: (){
+          Navigator.restorablePushNamed(context, MyProfileScreen.routeName);
+        },
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -88,37 +91,37 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _nameController,
-                style: textStyleNormal(primaryColor),
+                style: textStyleNormal(secondaryColor),
                 decoration: defaultInputDecoration("Name"),
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _contactNoController,
-                style: textStyleNormal(primaryColor),
+                style: textStyleNormal(secondaryColor),
                 decoration: defaultInputDecoration("Contact No"),
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _addressController,
-                style: textStyleNormal(primaryColor),
+                style: textStyleNormal(secondaryColor),
                 decoration: defaultInputDecoration("Address"),
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _cityController,
-                style: textStyleNormal(primaryColor),
+                style: textStyleNormal(secondaryColor),
                 decoration: defaultInputDecoration("City"),
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _stateController,
-                style: textStyleNormal(primaryColor),
+                style: textStyleNormal(secondaryColor),
                 decoration: defaultInputDecoration("State"),
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _postcodeController,
-                style: textStyleNormal(primaryColor),
+                style: textStyleNormal(secondaryColor),
                 decoration: defaultInputDecoration("Postcode"),
               ),
               const SizedBox(

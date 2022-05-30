@@ -1,4 +1,5 @@
 import 'package:dingo_clean/src/screen/authentication/forgot_password/forgot_password1/components/body.dart';
+import 'package:dingo_clean/src/screen/authentication/sign_in/sign_in_screen.dart';
 import 'package:dingo_clean/src/theme_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,12 @@ class _ForgotPassword1ScreenState extends State<ForgotPassword1Screen> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.white,
-      appBar: const ThemeAppBar(
+      appBar: ThemeAppBar(
         "",
         primaryBg: false,
+        onBackPressed: (){
+          Navigator.restorablePushNamed(context, SignInScreen.routeName);
+        },
       ),
       body: const Body(),
     );

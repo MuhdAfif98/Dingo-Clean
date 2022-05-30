@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dingo_clean/src/constant.dart';
+import 'package:dingo_clean/src/model/user.dart';
 import 'package:dingo_clean/src/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_scale_tap/flutter_scale_tap.dart';
 import 'package:iconsax/iconsax.dart';
 
 class Body extends StatefulWidget {
@@ -11,23 +16,68 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  String userID = '';
+  User? auth = FirebaseAuth.instance.currentUser;
+  late final String _uid = auth!.uid;
+
+  String name = '';
+  String image = '';
+  String contactNo = '';
+  String address = '';
+  String city = '';
+  String houseType = '';
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(15),
-          margin: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [shadowList()]),
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('booking')
+            .doc(_uid)
+            .collection("service")
+            .orderBy("Order created at", descending: true)
+            .limit(1)
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return ListView(
+            children: snapshot.data!.docs.map((document) {
+              return Column(
+                children: [
+                  buttonSetting(
+                    document['Client name'],
+                    document['Client Address'],
+                    document['Date'],
+                    document['Time'],
+                    document['Total Price'],
+                  )
+                ],
+              );
+            }).toList(),
+          );
+        });
+  }
+
+  Padding buttonSetting(
+      String clientName, clientAddress, date, time, int totalPrice) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 15),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              shadowList(),
+            ]),
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "THANK YOU!",
@@ -69,13 +119,13 @@ class _BodyState extends State<Body> {
                 children: [
                   Expanded(
                       child: Text(
-                    "30/12/2022",
+                    date,
                     textAlign: TextAlign.center,
                     style: textStyleNormal(Colors.black),
                   )),
                   Expanded(
                       child: Text(
-                    "2.31 PM",
+                    time,
                     textAlign: TextAlign.center,
                     style: textStyleNormal(Colors.black),
                   ))
@@ -101,7 +151,7 @@ class _BodyState extends State<Body> {
                 children: [
                   Expanded(
                       child: Text(
-                    "Muhammad Afif bin Ab Rahman",
+                    clientName,
                     textAlign: TextAlign.center,
                     style: textStyleNormal(Colors.black),
                   )),
@@ -114,7 +164,7 @@ class _BodyState extends State<Body> {
                 children: [
                   Expanded(
                       child: Text(
-                    "TOTAL",
+                    "ADDRESS",
                     textAlign: TextAlign.center,
                     style: textStyleBold(Colors.black, 14),
                   )),
@@ -127,7 +177,7 @@ class _BodyState extends State<Body> {
                 children: [
                   Expanded(
                       child: Text(
-                    "RM 30.25",
+                    clientAddress,
                     textAlign: TextAlign.center,
                     style: textStyleNormal(Colors.black),
                   )),
@@ -140,7 +190,7 @@ class _BodyState extends State<Body> {
                 children: [
                   Expanded(
                       child: Text(
-                    "PAYMENT METHOD",
+                    "TOTAL PRICE",
                     textAlign: TextAlign.center,
                     style: textStyleBold(Colors.black, 14),
                   )),
@@ -153,7 +203,7 @@ class _BodyState extends State<Body> {
                 children: [
                   Expanded(
                       child: Text(
-                    "Credit Card",
+                    "RM $totalPrice",
                     textAlign: TextAlign.center,
                     style: textStyleNormal(Colors.black),
                   )),
@@ -163,15 +213,6 @@ class _BodyState extends State<Body> {
           ),
         ),
       ),
-    );
-  }
-
-  BoxShadow shadowList() {
-    return BoxShadow(
-      blurRadius: 6,
-      spreadRadius: 5,
-      offset: const Offset(4, 4),
-      color: Colors.black.withOpacity(0.2),
     );
   }
 }

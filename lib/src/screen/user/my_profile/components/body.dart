@@ -78,6 +78,7 @@ class _BodyState extends State<Body> {
             ),
             const SizedBox(height: 20),
             TextFormField(
+              
               readOnly: true,
               style: textStyleNormal(primaryColor),
               decoration: defaultInputDecoration(name),

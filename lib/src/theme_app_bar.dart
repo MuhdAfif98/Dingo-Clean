@@ -14,7 +14,7 @@ class ThemeAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title, {
     Key? key,
     this.previous = true,
-    this.primaryBg = true,
+    this.primaryBg = false,
     this.color = Colors.transparent,
     this.trailing,
     this.leading,
@@ -32,12 +32,10 @@ class ThemeAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       leading: previous
           ? IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: onBackPressed,
               iconSize: 24,
               icon: Icon(
-                Iconsax.arrow_left,
+                Iconsax.arrow_left_2,
                 color: primaryBg ? Colors.white : Colors.black,
               ),
             )

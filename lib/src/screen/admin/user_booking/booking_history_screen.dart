@@ -1,4 +1,5 @@
 import 'package:dingo_clean/src/default_button.dart';
+import 'package:dingo_clean/src/screen/admin/homepage/components/homepage_screen.dart';
 import 'package:dingo_clean/src/screen/admin/user_booking/components/body.dart';
 import 'package:dingo_clean/src/theme_app_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class UserBookingScreen extends StatefulWidget {
   const UserBookingScreen({Key? key}) : super(key: key);
-  static const routeName = '/bookingHistory';
+  static const routeName = '/userBookingHistory';
 
   @override
   State<UserBookingScreen> createState() => _UserBookingScreenState();
@@ -15,11 +16,14 @@ class UserBookingScreen extends StatefulWidget {
 class _UserBookingScreenState extends State<UserBookingScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       appBar: ThemeAppBar(
         "User Booking",
         color: Colors.transparent,
+        onBackPressed: () {
+          Navigator.restorablePushNamed(context, HomepageAdminScreen.routeName);
+        },
       ),
       body: Body(),
     );

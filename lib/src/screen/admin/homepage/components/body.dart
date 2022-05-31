@@ -1,4 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dingo_clean/src/constant.dart';
+import 'package:dingo_clean/src/screen/admin/financial_service/financial_screen.dart';
+import 'package:dingo_clean/src/screen/admin/sign_in_admin/sign_in_screen.dart';
+import 'package:dingo_clean/src/screen/admin/user_booking/booking_history_screen.dart';
 import 'package:dingo_clean/src/screen/authentication/sign_in/sign_in_screen.dart';
 import 'package:dingo_clean/src/screen/user/booking_1/booking_1_screen.dart';
 import 'package:dingo_clean/src/screen/user/setting/setting_screen.dart';
@@ -8,6 +12,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scale_tap/flutter_scale_tap.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:number_animation/number_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' as math;
 
@@ -20,115 +25,17 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //Initialization of Basic House Cleaning
-  double bhsum = 0;
-  double bhtotal = 0;
+  double totalGrossProfit = 0;
+  double totalAllProfit = 0;
 
-  //Initialization of Deep Cleaning
-  double dsum = 0;
-  double dtotal = 0;
-
-  //Initialization of Laundry Cleaning
-  double lsum = 0;
-  double ltotal = 0;
-
-  //Initialization of Green Cleaning
-  double gsum = 0;
-  double gtotal = 0;
-
-  //Initialization of Sanitization
-  double ssum = 0;
-  double stotal = 0;
-
-  //Total of all price
-  double totalServiceSum = 0;
-  double totalServicePrice = 0;
-
-  //Get total price of Basic House Cleaning
-  void getBasicHouseCleaning() {
-    FirebaseFirestore.instance
-        .collection('bookingAdmin')
-        .where("Service type", isEqualTo: "Basic House Cleaning")
-        .get()
-        .then(
+  void getTotalProfit() {
+    FirebaseFirestore.instance.collection('bookingAdmin').get().then(
       (querySnapshot) {
         for (var result in querySnapshot.docs) {
-          bhsum = bhsum + result.data()['Total Price'];
+          totalAllProfit = totalAllProfit + result.data()['Total Price'];
         }
         setState(() {
-          bhtotal = bhsum;
-        });
-      },
-    );
-  }
-
-  //Get total price of Deep Cleaning
-  void getDeepCleaning() {
-    FirebaseFirestore.instance
-        .collection('bookingAdmin')
-        .where("Service type", isEqualTo: "Deep Cleaning")
-        .get()
-        .then(
-      (querySnapshot) {
-        for (var result in querySnapshot.docs) {
-          dsum = dsum + result.data()['Total Price'];
-        }
-        setState(() {
-          dtotal = dsum;
-        });
-      },
-    );
-  }
-
-  //Get total price of Laundry Cleaning
-  void getLaundryCleaning() {
-    FirebaseFirestore.instance
-        .collection('bookingAdmin')
-        .where("Service type", isEqualTo: "Laundry Cleaning")
-        .get()
-        .then(
-      (querySnapshot) {
-        for (var result in querySnapshot.docs) {
-          lsum = lsum + result.data()['Total Price'];
-        }
-        setState(() {
-          ltotal = lsum;
-        });
-      },
-    );
-  }
-
-  //Get total price of Green Cleaning
-  void getGreenCleaning() {
-    FirebaseFirestore.instance
-        .collection('bookingAdmin')
-        .where("Service type", isEqualTo: "Green Cleaning")
-        .get()
-        .then(
-      (querySnapshot) {
-        for (var result in querySnapshot.docs) {
-          gsum = gsum + result.data()['Total Price'];
-        }
-        setState(() {
-          gtotal = gsum;
-        });
-      },
-    );
-  }
-
-  //Get total price of Sanitization
-  void getSanitization() {
-    FirebaseFirestore.instance
-        .collection('bookingAdmin')
-        .where("Service type", isEqualTo: "Sanitization")
-        .get()
-        .then(
-      (querySnapshot) {
-        for (var result in querySnapshot.docs) {
-          ssum = ssum + result.data()['Total Price'];
-        }
-        setState(() {
-          stotal = ssum;
+          totalGrossProfit = totalAllProfit;
         });
       },
     );
@@ -136,46 +43,8 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
-    getBasicHouseCleaning();
-    getDeepCleaning();
-    getLaundryCleaning();
-    getGreenCleaning();
-    getSanitization();
     super.initState();
-  }
-
-  static const shadowColor = Color(0xFFCCCCCC);
-  static const dataList = [
-    _BarData(Color(0xFFecb206), 18, 18),
-    _BarData(Color(0xFFa8bd1a), 17, 8),
-    _BarData(Color(0xFF17987b), 10, 15),
-    _BarData(Color(0xFFb87d46), 2.5, 5),
-    _BarData(Color(0xFF295ab5), 2, 2.5),
-    _BarData(Color(0xFFea0107), 2, 2),
-  ];
-
-  BarChartGroupData generateBarGroup(
-    int x,
-    Color color,
-    double value,
-    double shadowValue,
-  ) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: value,
-          color: color,
-          width: 6,
-        ),
-        BarChartRodData(
-          toY: shadowValue,
-          color: _BodyState.shadowColor,
-          width: 6,
-        ),
-      ],
-      showingTooltipIndicators: touchedGroupIndex == x ? [0] : [],
-    );
+    getTotalProfit();
   }
 
   int touchedGroupIndex = -1;
@@ -239,130 +108,106 @@ class _BodyState extends State<Body> {
             SizedBox(
               height: 15,
             ),
-            Card(
-              color: Colors.white,
-              elevation: 4,
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [shadowList()],
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              alignment: Alignment.center,
               child: Padding(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(15.0),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AspectRatio(
-                      aspectRatio: 1.4,
-                      child: BarChart(
-                        BarChartData(
-                          alignment: BarChartAlignment.spaceBetween,
-                          borderData: FlBorderData(
-                            show: true,
-                            border: const Border.symmetric(
-                              horizontal: BorderSide(
-                                color: Color(0xFFececec),
-                              ),
-                            ),
-                          ),
-                          titlesData: FlTitlesData(
-                            show: true,
-                            leftTitles: AxisTitles(
-                              drawBehindEverything: true,
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 30,
-                                getTitlesWidget: (value, meta) {
-                                  return Text(
-                                    value.toInt().toString(),
-                                    style: const TextStyle(
-                                      color: Color(0xFF606060),
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  );
-                                },
-                              ),
-                            ),
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 36,
-                                getTitlesWidget: (value, meta) {
-                                  final index = value.toInt();
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: _IconWidget(
-                                      color: _BodyState.dataList[index].color,
-                                      isSelected: touchedGroupIndex == index,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                            rightTitles: AxisTitles(),
-                            topTitles: AxisTitles(),
-                          ),
-                          gridData: FlGridData(
-                            show: true,
-                            drawVerticalLine: false,
-                            getDrawingHorizontalLine: (value) => FlLine(
-                              color: const Color(0xFFececec),
-                              dashArray: null,
-                              strokeWidth: 1,
-                            ),
-                          ),
-                          barGroups:
-                              _BodyState.dataList.asMap().entries.map((e) {
-                            final index = e.key;
-                            final data = e.value;
-                            return generateBarGroup(index, data.color,
-                                data.value, data.shadowValue);
-                          }).toList(),
-                          maxY: 20,
-                          barTouchData: BarTouchData(
-                            enabled: true,
-                            handleBuiltInTouches: false,
-                            touchTooltipData: BarTouchTooltipData(
-                                tooltipBgColor: Colors.transparent,
-                                tooltipMargin: 0,
-                                getTooltipItem: (
-                                  BarChartGroupData group,
-                                  int groupIndex,
-                                  BarChartRodData rod,
-                                  int rodIndex,
-                                ) {
-                                  return BarTooltipItem(
-                                    rod.toY.toString(),
-                                    TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: rod.color!,
-                                        fontSize: 18,
-                                        shadows: const [
-                                          Shadow(
-                                            color: Colors.black26,
-                                            blurRadius: 12,
-                                          )
-                                        ]),
-                                  );
-                                }),
-                            touchCallback: (event, response) {
-                              if (event.isInterestedForInteractions &&
-                                  response != null &&
-                                  response.spot != null) {
-                                setState(() {
-                                  touchedGroupIndex =
-                                      response.spot!.touchedBarGroupIndex;
-                                });
-                              } else {
-                                setState(() {
-                                  touchedGroupIndex = -1;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                      ),
+                    Text("Total Gross Profit"),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    NumberAnimation(
+                      textAlign: TextAlign.center,
+                      decimalPoint: 0,
+                      before: "RM ",
+                      start: 0, // default is 0, can remove
+                      end: totalGrossProfit.toInt(),
+                      style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 40,
+                          fontWeight: FontWeight.w500),
+                      duration: Duration(milliseconds: 1000),
                     ),
                   ],
                 ),
               ),
-            )
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              "Quick Action",
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            ScaleTap(
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                    context, FinancialServiceScreen.routeName);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/clean1_1.png"),
+                      alignment: Alignment.centerRight,
+                      filterQuality: FilterQuality.high,
+                      scale: 1.5),
+                  boxShadow: [shadowList()],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 20),
+                    child: Text(
+                      "Financial Status",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 0, 119, 216),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20),
+                    )),
+              ),
+            ),
+            SizedBox(height: 15,),
+            ScaleTap(
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                    context, UserBookingScreen.routeName);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/clean1_1.png"),
+                      alignment: Alignment.centerRight,
+                      filterQuality: FilterQuality.high,
+                      scale: 1.5),
+                  boxShadow: [shadowList()],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 20),
+                    child: Text(
+                      "User Booking",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 0, 119, 216),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20),
+                    )),
+              ),
+            ),
           ],
         ),
       ),
@@ -382,7 +227,7 @@ class _BodyState extends State<Body> {
     await _auth.signOut();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SignInScreen()),
+      MaterialPageRoute(builder: (context) => SignInAdminScreen()),
     );
   }
 }

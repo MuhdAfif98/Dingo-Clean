@@ -122,12 +122,10 @@ class MyApp extends StatelessWidget {
                     return const Booking2Screen();
                   case ReceiptScreen.routeName:
                     return const ReceiptScreen();
-         
                   case HomepageScreen.routeName:
                     return const HomepageScreen();
                   case HomepageAdminScreen.routeName:
                     return const HomepageAdminScreen();
-
                   case FinancialServiceScreen.routeName:
                     return const FinancialServiceScreen();
                   case SplashScreen.routeName:

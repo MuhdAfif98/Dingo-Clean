@@ -147,33 +147,17 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          text: "Forgot Password",
-                          style: textStyleNormal(primaryColor),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.restorablePushNamed(
-                                  context, ForgotPassword1Screen.routeName);
-                            },
-                        ),
-                      ),
-                    ],
-                  ),
+                  
                   const SizedBox(height: 40),
                   DefaultButton(
                     title: "Sign In",
                     loadingText: "Sign you in . . .",
                     press: () {
-                      Navigator.restorablePushNamed(context, HomepageAdminScreen.routeName);
-                      // if (_formKey.currentState!.validate()) {
-                      //   signInAdmin();
-                      // }
-                      // debugPrint(email);
+            
+                      if (_formKey.currentState!.validate()) {
+                        signInAdmin();
+                      }
+                      debugPrint(email);
                     },
                   ),
                   const SizedBox(height: 40),
@@ -184,7 +168,7 @@ class _BodyState extends State<Body> {
                     },
                     child: Text(
                       "Go to User Page ",
-                      style: textStyleBold(primaryColor, 14),
+                      style: textStyleBold(Colors.white, 14),
                     ),
                   )
                 ],

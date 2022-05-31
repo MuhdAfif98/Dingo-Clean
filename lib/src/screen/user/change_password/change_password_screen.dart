@@ -1,7 +1,7 @@
 import 'package:dingo_clean/src/constant.dart';
 import 'package:dingo_clean/src/default_button.dart';
-import 'package:dingo_clean/src/screen/admin/setting/setting_screen.dart';
 import 'package:dingo_clean/src/screen/user/change_password/components/body.dart';
+import 'package:dingo_clean/src/screen/user/setting/setting_screen.dart';
 import 'package:dingo_clean/src/theme_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

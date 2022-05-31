@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dingo_clean/src/theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scale_tap/flutter_scale_tap.dart';
@@ -145,32 +146,35 @@ class _BodyState extends State<Body> {
         children: [
           AspectRatio(
             aspectRatio: 1.5,
-            child: Card(
-              color: Colors.white,
-              elevation: 5,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: PieChart(
-                  PieChartData(
-                      pieTouchData: PieTouchData(touchCallback:
-                          (FlTouchEvent event, pieTouchResponse) {
-                        setState(() {
-                          if (!event.isInterestedForInteractions ||
-                              pieTouchResponse == null ||
-                              pieTouchResponse.touchedSection == null) {
-                            touchedIndex = -1;
-                            return;
-                          }
-                          touchedIndex = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                        });
-                      }),
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
-                      sectionsSpace: 0,
-                      centerSpaceRadius: 0,
-                      sections: showingSections()),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Card(
+                color: Colors.white,
+                elevation: 5,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: PieChart(
+                    PieChartData(
+                        pieTouchData: PieTouchData(touchCallback:
+                            (FlTouchEvent event, pieTouchResponse) {
+                          setState(() {
+                            if (!event.isInterestedForInteractions ||
+                                pieTouchResponse == null ||
+                                pieTouchResponse.touchedSection == null) {
+                              touchedIndex = -1;
+                              return;
+                            }
+                            touchedIndex = pieTouchResponse
+                                .touchedSection!.touchedSectionIndex;
+                          });
+                        }),
+                        borderData: FlBorderData(
+                          show: false,
+                        ),
+                        sectionsSpace: 0,
+                        centerSpaceRadius: 0,
+                        sections: showingSections()),
+                  ),
                 ),
               ),
             ),
@@ -207,71 +211,86 @@ class _BodyState extends State<Body> {
           SizedBox(
             width: 10,
           ),
-          NumberAnimation(
-            decimalPoint: 2,
-            before: "RM ",
-            start: 0, // default is 0, can remove
-            end: totalServiceSum.toInt(),
-            style: TextStyle(color: Colors.pinkAccent, fontSize: 30),
-            duration: Duration(milliseconds: 1000),
+          Container(
+            decoration: BoxDecoration(
+                color: Color.fromARGB(255, 185, 255, 212),
+                boxShadow: [shadowList()],
+                borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: NumberAnimation(
+                decimalPoint: 2,
+                before: "RM ",
+                start: 0, // default is 0, can remove
+                end: totalServiceSum.toInt(),
+                style: TextStyle(
+                    color: Color.fromARGB(255, 0, 139, 5),
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500),
+                duration: Duration(milliseconds: 1000),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Row indicator(String image, title, pricePerService) {
-    return Row(
-      children: [
-        Spacer(),
-        Expanded(
-          flex: 2,
-          child: CircleAvatar(
-            backgroundColor: Color.fromRGBO(121, 173, 220, 1),
-            radius: 20,
+  Padding indicator(String image, title, pricePerService) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        children: [
+          Expanded(
             child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 17,
-              backgroundImage: AssetImage(image),
+              backgroundColor: Color.fromRGBO(121, 173, 220, 1),
+              radius: 20,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 17,
+                backgroundImage: AssetImage(image),
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          flex: 2,
-          child: Text(
-            title,
-            textAlign: TextAlign.left,
+          SizedBox(
+            width: 10,
           ),
-        ),
-        SizedBox(
-          width: 10,
-        ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              title,
+              textAlign: TextAlign.left,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
 
-        NumberAnimation(
-          decimalPoint: 0,
-          before: "RM ",
-          start: 0, // default is 0, can remove
-          end: pricePerService.toInt(),
-          style: TextStyle(color: Colors.green, fontSize: 14),
-          duration: Duration(milliseconds: 1000),
-        ),
-        // Expanded(
-        //   flex: 2,
-        //   child: NumberSlideAnimation(
-        //     number: pricePerService.round().toString(),
-        //     duration: const Duration(seconds: 2),
-        //     curve: Curves.easeInOut,
-        //     textStyle: TextStyle(
-        //         fontSize: 14.0,
-        //         fontWeight: FontWeight.bold,
-        //         color: Colors.green),
-        //   ),
-        // ),
-        Spacer()
-      ],
+          Expanded(
+            child: NumberAnimation(
+              textAlign: TextAlign.center,
+              decimalPoint: 0,
+              before: "RM ",
+              start: 0, // default is 0, can remove
+              end: pricePerService.toInt(),
+              style: TextStyle(color: Colors.green, fontSize: 14),
+              duration: Duration(milliseconds: 1000),
+            ),
+          ),
+          // Expanded(
+          //   flex: 2,
+          //   child: NumberSlideAnimation(
+          //     number: pricePerService.round().toString(),
+          //     duration: const Duration(seconds: 2),
+          //     curve: Curves.easeInOut,
+          //     textStyle: TextStyle(
+          //         fontSize: 14.0,
+          //         fontWeight: FontWeight.bold,
+          //         color: Colors.green),
+          //   ),
+          // ),
+        ],
+      ),
     );
   }
 

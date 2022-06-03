@@ -19,7 +19,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
     return  Scaffold(
       backgroundColor: Colors.white,
       appBar: ThemeAppBar(
-        "Update Profile",
+        "Booking History",
         color: Colors.transparent,
         onBackPressed: (){
           Navigator.restorablePushNamed(context, HomepageScreen.routeName);

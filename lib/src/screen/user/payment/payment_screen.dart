@@ -111,11 +111,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               onFinish: (number) async {
                                 // payment done
                                 print('order id: ' + number);
+                                
                               },
-                              totalPrice: widget.totalPrice,
                             ),
                           ),
                         );
+                  
                       });
                       break;
                     case null:
@@ -232,7 +233,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
         .collection('booking')
         .doc(userID)
         .collection("service");
-    var querySnapshots = await collection.orderBy("Order created at",descending: true).limit(1).get();
+    var querySnapshots = await collection
+        .orderBy("Order created at", descending: true)
+        .limit(1)
+        .get();
 
     //Update bookingAdmin collection
     var adminCollection = FirebaseFirestore.instance.collection('bookingAdmin');

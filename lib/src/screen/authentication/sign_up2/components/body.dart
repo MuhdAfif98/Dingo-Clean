@@ -225,11 +225,29 @@ class _BodyState extends State<Body> {
               strokeWidth: 2,
               dottedLength: 10,
               child: Column(
-                children: const [
+                children: [
                   Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Icon(Iconsax.user,size: 85,color: disabledText,)
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 80,
+                      vertical: 40,
+                    ),
+                    child: CircleAvatar(
+                      radius: 80,
+                      backgroundImage: file == null
+                          ? const NetworkImage(
+                              'https://www.icmetl.org/wp-content/uploads/2020/11/user-icon-human-person-sign-vector-10206693.png')
+                          : FileImage(file!) as ImageProvider,
+                    ),
                   ),
+                  Text(
+                    "Upload Your Selfie",
+                    style: textStyleMedium(),
+                  ),
+                  const SizedBox(height: 20),
+                  // Padding(
+                  //   padding: EdgeInsets.all(20),
+                  //   child: Icon(Iconsax.user,size: 85,color: disabledText,)
+                  // ),
   
                 ],
               ),

@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dingo_clean/src/screen/user/receipt/receipt_screen.dart';
 import 'package:dingo_clean/src/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,8 @@ import 'package:dingo_clean/src/services/paypal_services.dart';
 
 class PaypalPayment extends StatefulWidget {
   final Function onFinish;
-  final int totalPrice;
-  const PaypalPayment({Key? key, required this.onFinish, required this.totalPrice}) : super(key: key);
+
+  PaypalPayment({required this.onFinish});
 
   @override
   State<StatefulWidget> createState() {
@@ -18,10 +19,6 @@ class PaypalPayment extends StatefulWidget {
 }
 
 class PaypalPaymentState extends State<PaypalPayment> {
-  String userID = '';
-  final firestore = FirebaseFirestore.instance;
-  final AuthService _auth = AuthService();
-
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var checkoutUrl;
   var executeUrl;
@@ -35,6 +32,9 @@ class PaypalPaymentState extends State<PaypalPayment> {
     "symbolBeforeTheNumber": true,
     "currency": "MYR"
   };
+  String userID = '';
+  final firestore = FirebaseFirestore.instance;
+  final AuthService _auth = AuthService();
 
   bool isEnableShipping = false;
   bool isEnableAddress = false;
@@ -80,6 +80,7 @@ class PaypalPaymentState extends State<PaypalPayment> {
 
   // item name, price and quantity
   String itemName = 'iPhone X';
+  String itemPrice = '1.99';
   int quantity = 1;
 
   Map<String, dynamic> getOrderParams() {
@@ -87,7 +88,7 @@ class PaypalPaymentState extends State<PaypalPayment> {
       {
         "name": itemName,
         "quantity": quantity,
-        "price": widget.totalPrice,
+        "price": itemPrice,
         "currency": defaultCurrency["currency"]
       }
     ];
@@ -158,7 +159,8 @@ class PaypalPaymentState extends State<PaypalPayment> {
               } else {
                 Navigator.of(context).pop();
               }
-              Navigator.of(context).pop();
+              Navigator.restorablePushNamed(context, ReceiptScreen.routeName);
+              updateStatus();
             }
             if (request.url.contains(cancelURL)) {
               Navigator.of(context).pop();
@@ -183,7 +185,6 @@ class PaypalPaymentState extends State<PaypalPayment> {
       );
     }
   }
-
   void updateStatus() {
     User? getUser = FirebaseAuth.instance.currentUser;
     userID = getUser!.uid;

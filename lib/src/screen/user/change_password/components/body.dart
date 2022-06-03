@@ -52,7 +52,7 @@ class _BodyState extends State<Body> {
             builder: (context) => const HomepageScreen(),
           ));
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Your password has been changed, Please login again")));
+          content: Text("Your password has been changed")));
     } catch (error) {
       print("Change password process failed");
     }
